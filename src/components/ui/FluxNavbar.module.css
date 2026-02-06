@@ -1,0 +1,141 @@
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding: 20px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(0, 5, 20, 0.8);
+    backdrop-filter: blur(15px);
+    z-index: 1000;
+    border-bottom: 1px solid rgba(0, 243, 255, 0.1);
+}
+
+.logoContainer {
+    cursor: pointer;
+}
+
+.logoGlitch {
+    font-family: var(--font-orbitron);
+    font-size: 1.8rem;
+    font-weight: 900;
+    color: white;
+    text-shadow: 0 0 10px rgba(0, 243, 255, 0.8);
+    position: relative;
+    letter-spacing: 2px;
+}
+
+.subLogo {
+    font-family: var(--font-rajdhani);
+    font-size: 0.8rem;
+    color: var(--primary-color);
+    letter-spacing: 4px;
+    text-align: right;
+    margin-top: -5px;
+}
+
+.menu {
+    display: flex;
+    gap: 30px;
+    align-items: center;
+}
+
+.link {
+    color: rgba(255, 255, 255, 0.7);
+    text-decoration: none;
+    font-family: var(--font-rajdhani);
+    font-weight: 600;
+    font-size: 1.1rem;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.link:hover {
+    color: var(--primary-color);
+    text-shadow: 0 0 8px var(--primary-glow);
+}
+
+.ceoLink {
+    color: #ff9d00;
+    border: 1px solid #ff9d00;
+    padding: 5px 15px;
+    border-radius: 4px;
+}
+
+.ceoLink:hover {
+    background: rgba(255, 157, 0, 0.1);
+    box-shadow: 0 0 15px rgba(255, 157, 0, 0.3);
+}
+
+.logoutBtn {
+    background: none;
+    border: 1px solid rgba(255, 0, 80, 0.5);
+    color: rgba(255, 0, 80, 0.8);
+    padding: 5px 15px;
+    font-family: var(--font-rajdhani);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.logoutBtn:hover {
+    background: rgba(255, 0, 80, 0.1);
+    color: #ff0050;
+    box-shadow: 0 0 10px rgba(255, 0, 80, 0.3);
+}
+
+.menuButton {
+    display: none;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+.hamburger {
+    width: 30px;
+    height: 3px;
+    background: white;
+    position: relative;
+}
+
+.hamburger::before,
+.hamburger::after {
+    content: '';
+    position: absolute;
+    width: 30px;
+    height: 3px;
+    background: white;
+    left: 0;
+}
+
+.hamburger::before {
+    top: -8px;
+}
+
+.hamburger::after {
+    top: 8px;
+}
+
+@media (max-width: 768px) {
+    .menu {
+        display: none;
+        flex-direction: column;
+        position: absolute;
+        top: 80px;
+        right: 0;
+        width: 100%;
+        background: black;
+        padding: 20px;
+        border-bottom: 1px solid var(--primary-color);
+    }
+
+    .menu.open {
+        display: flex;
+    }
+
+    .menuButton {
+        display: block;
+    }
+}

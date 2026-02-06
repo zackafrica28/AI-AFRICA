@@ -1,0 +1,99 @@
+.container {
+    min-height: 100vh;
+    padding-top: 100px;
+    background: var(--background);
+}
+
+.header {
+    text-align: center;
+    margin-bottom: 60px;
+}
+
+.header p {
+    color: var(--primary-glow);
+    font-family: var(--font-rajdhani);
+    font-size: 1.2rem;
+    margin-top: 10px;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 40px;
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    min-height: 400px;
+}
+
+.price {
+    font-size: 3rem;
+    font-family: var(--font-orbitron);
+    color: white;
+    margin: 20px 0;
+    text-shadow: 0 0 10px rgba(0, 243, 255, 0.5);
+}
+
+.period {
+    font-size: 1rem;
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.features {
+    list-style: none;
+    padding: 0;
+    margin: 20px 0;
+    flex-grow: 1;
+}
+
+.features li {
+    color: #ccc;
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    font-family: var(--font-rajdhani);
+}
+
+.btn,
+.btnPremium {
+    width: 100%;
+    padding: 15px;
+    border: none;
+    font-family: var(--font-orbitron);
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 20px;
+}
+
+.btn {
+    background: transparent;
+    border: 1px solid var(--primary-color);
+    color: var(--primary-color);
+}
+
+.btn:hover {
+    background: rgba(0, 243, 255, 0.1);
+}
+
+.btnPremium {
+    background: linear-gradient(45deg, var(--primary-color), #00ff9d);
+    color: black;
+    box-shadow: 0 0 20px rgba(0, 243, 255, 0.4);
+}
+
+.btnPremium:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 40px rgba(0, 243, 255, 0.6);
+}
+
+.premium {
+    border-color: #00ff9d !important;
+    box-shadow: 0 0 30px rgba(0, 255, 157, 0.1) !important;
+}
