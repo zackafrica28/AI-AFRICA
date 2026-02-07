@@ -1,4 +1,5 @@
 "use client";
+import { useState } from "react";
 import FluxNavbar from "@/components/ui/FluxNavbar";
 import styles from "./settings.module.css";
 
