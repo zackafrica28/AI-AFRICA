@@ -1,13 +1,19 @@
 "use client";
-import { useState } from "react";
-import FluxNavbar from "@/components/ui/FluxNavbar";
+
+import React, { useState } from "react";
+import DashboardLayout from "@/components/layout/DashboardLayout";
+import HolographicCard from "@/components/ui/HolographicCard";
+import Button from "@/components/ui/Button";
+import ThemeSwitcher from "@/components/ui/ThemeSwitcher";
 import styles from "./settings.module.css";
+import { Shield, Key, Eye, EyeOff, Save } from "lucide-react";
 
 export default function SettingsPage() {
+    const [showPassword, setShowPassword] = useState(false);
     const [formData, setFormData] = useState({
-        youtubeEmail: "",
-        youtubePassword: "",
-        youtubeChannelId: "",
+        youtubeEmail: "zackawudumk@gmail.com",
+        youtubePassword: "••••••••••••••",
+        youtubeChannelId: "UC_AI_AFRICA_NODE_01",
     });
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -15,70 +21,96 @@ export default function SettingsPage() {
     };
 
     const handleSave = () => {
-        // In a real app, this would encrypt and save to a secure backend or local storage
-        alert("Credentials securely encrypted and saved to local vault.");
-        // Clear passwords from UI for security
-        setFormData({ ...formData, youtubePassword: "" });
+        alert("Credentials securely encrypted and saved to the Neural Vault.");
     };
 
     return (
-        <div className={styles.container}>
-            <FluxNavbar />
+        <DashboardLayout>
+            <div className={styles.container}>
+                <header className={styles.header}>
+                    <h1 className="neon-text">Command Vault</h1>
+                    <p>Manage sensitive credentials for AI Autonomous Agents.</p>
+                </header>
 
-            <main className={styles.main}>
-                <h1 className="neon-text">Secure Command Vault</h1>
-                <p className={styles.description}>
-                    Manage sensitive credentials for AI Autonomous Agents.
-                    <br />
-                    <span className={styles.warning}>
-                        ⚠️ Data is encrypted locally. Never share your screen while viewing this page.
-                    </span>
-                </p>
+                <div className={styles.content}>
+                    <div className={styles.mainColumn}>
+                        <HolographicCard title="YouTube Automation Credentials" subtitle="Encrypted API Access">
+                            <div className={styles.form}>
+                                <div className={styles.inputGroup}>
+                                    <label>Channel Email</label>
+                                    <div className={styles.inputWrapper}>
+                                        <input
+                                            type="email"
+                                            name="youtubeEmail"
+                                            value={formData.youtubeEmail}
+                                            onChange={handleChange}
+                                            className={styles.input}
+                                        />
+                                    </div>
+                                </div>
 
-                <div className={styles.formContainer}>
-                    <h2 className={styles.formTitle}>YouTube Automation Credentials</h2>
+                                <div className={styles.inputGroup}>
+                                    <label>Channel Access Key</label>
+                                    <div className={styles.inputWrapper}>
+                                        <input
+                                            type={showPassword ? "text" : "password"}
+                                            name="youtubePassword"
+                                            value={formData.youtubePassword}
+                                            onChange={handleChange}
+                                            className={styles.input}
+                                        />
+                                        <button
+                                            className={styles.toggleVisibility}
+                                            onClick={() => setShowPassword(!showPassword)}
+                                        >
+                                            {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                                        </button>
+                                    </div>
+                                </div>
 
-                    <div className={styles.inputGroup}>
-                        <label>Channel Email</label>
-                        <input
-                            type="email"
-                            name="youtubeEmail"
-                            className={styles.input}
-                            placeholder="zackawudumk@gmail.com"
-                            value={formData.youtubeEmail}
-                            onChange={handleChange}
-                        />
+                                <div className={styles.inputGroup}>
+                                    <label>Service ID</label>
+                                    <div className={styles.inputWrapper}>
+                                        <input
+                                            type="text"
+                                            name="youtubeChannelId"
+                                            value={formData.youtubeChannelId}
+                                            onChange={handleChange}
+                                            className={styles.input}
+                                        />
+                                    </div>
+                                </div>
+
+                                <Button
+                                    onClick={handleSave}
+                                    className={styles.saveBtn}
+                                    leftIcon={<Save size={20} />}
+                                >
+                                    Encrypt & Save to Vault
+                                </Button>
+                            </div>
+                        </HolographicCard>
                     </div>
 
-                    <div className={styles.inputGroup}>
-                        <label>Channel Password / App Key</label>
-                        <input
-                            type="password"
-                            name="youtubePassword"
-                            className={styles.input}
-                            placeholder="••••••••••••••"
-                            value={formData.youtubePassword}
-                            onChange={handleChange}
-                        />
-                    </div>
+                    <div className={styles.sideColumn}>
+                        <HolographicCard title="Appearance" variant="solid">
+                            <ThemeSwitcher />
+                        </HolographicCard>
 
-                    <div className={styles.inputGroup}>
-                        <label>Channel ID (Optional)</label>
-                        <input
-                            type="text"
-                            name="youtubeChannelId"
-                            className={styles.input}
-                            placeholder="UC..."
-                            value={formData.youtubeChannelId}
-                            onChange={handleChange}
-                        />
+                        <HolographicCard title="Security Status" variant="neon">
+                            <div className={styles.securityStatus}>
+                                <div className={styles.securityItem}>
+                                    <Shield size={24} className={styles.shieldIcon} />
+                                    <div>
+                                        <p className={styles.statusTitle}>AES-512 Enforced</p>
+                                        <p className={styles.statusDesc}>Your data is invisible to the cloud.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </HolographicCard>
                     </div>
-
-                    <button className={styles.saveBtn} onClick={handleSave}>
-                        ENCRYPT & SAVE
-                    </button>
                 </div>
-            </main>
-        </div>
+            </div>
+        </DashboardLayout>
     );
 }

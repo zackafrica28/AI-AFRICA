@@ -3,6 +3,7 @@ import { Orbitron, Rajdhani } from "next/font/google";
 import "./globals.css";
 import { AuthProvider } from "@/context/AuthContext";
 import { LiveFeedProvider } from "@/context/LiveFeedContext";
+import { ThemeProvider } from "@/context/ThemeContext";
 
 const orbitron = Orbitron({
   variable: "--font-orbitron",
@@ -28,12 +29,17 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body className={`${orbitron.variable} ${rajdhani.variable} antialiased`}>
-        <AuthProvider>
-          <LiveFeedProvider>{children}</LiveFeedProvider>
-        </AuthProvider>
+        <ThemeProvider>
+          <AuthProvider>
+            <LiveFeedProvider>
+              {children}
+            </LiveFeedProvider>
+          </AuthProvider>
+        </ThemeProvider>
       </body>
     </html>
   );
 }
+

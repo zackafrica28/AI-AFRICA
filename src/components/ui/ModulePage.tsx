@@ -1,7 +1,10 @@
 "use client";
-import FluxNavbar from "@/components/ui/FluxNavbar";
+
+import React from "react";
+import DashboardLayout from "@/components/layout/DashboardLayout";
 import styles from "./ModulePage.module.css";
 import { useRouter } from "next/navigation";
+import { ChevronLeft } from "lucide-react";
 
 interface ModulePageProps {
     title: string;
@@ -13,12 +16,11 @@ const ModulePage: React.FC<ModulePageProps> = ({ title, subtitle, children }) =>
     const router = useRouter();
 
     return (
-        <div className={styles.container}>
-            <FluxNavbar />
-
-            <main className={styles.main}>
+        <DashboardLayout>
+            <div className={styles.container}>
                 <button onClick={() => router.back()} className={styles.backBtn}>
-                    ← BACK TO DASHBOARD
+                    <ChevronLeft size={18} />
+                    <span>Back</span>
                 </button>
 
                 <header className={styles.header}>
@@ -29,8 +31,8 @@ const ModulePage: React.FC<ModulePageProps> = ({ title, subtitle, children }) =>
                 <div className={styles.content}>
                     {children}
                 </div>
-            </main>
-        </div>
+            </div>
+        </DashboardLayout>
     );
 };
 

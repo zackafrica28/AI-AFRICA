@@ -1,42 +1,71 @@
 "use client";
 
-import { useState} from "react";
+import React, { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "@/context/AuthContext";
 import styles from "./login.module.css";
-import FluxNavbar from "@/components/ui/FluxNavbar";
+import Button from "@/components/ui/Button";
+import { Fingerprint, Loader2 } from "lucide-react";
+
 export default function LoginPage() {
     const [email, setEmail] = useState("");
+    const [isLoading, setIsLoading] = useState(false);
     const { login } = useAuth();
 
-const handleLogin = (e: React.FormEvent) => {
+    const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
+        setIsLoading(true);
+        // Mimic biometric scan
+        await new Promise((resolve) => setTimeout(resolve, 2000));
         login(email);
     };
 
     return (
-        <div className={styles.container}>
-            <FluxNavbar />
-            <div className={styles.content}>
-                <h1 className="neon-text">Identity Verification</h1>
-                <p className={styles.subtitle}>Enter credentials to access the Neural Grid.</p>
+        <div className={styles.page}>
+            {/* Background Decor */}
+            <div className={styles.orb} />
+
+            <motion.div
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                className={styles.loginCard}
+            >
+                <div className={styles.header}>
+                    <div className={styles.logoWrapper}>
+                        <Fingerprint size={48} className={styles.logoIcon} />
+                    </div>
+                    <h1 className="neon-text">System Identity</h1>
+                    <p>Initialize your link to the Neural Grid</p>
+                </div>
 
                 <form onSubmit={handleLogin} className={styles.form}>
                     <div className={styles.inputGroup}>
-                        <label>Neural ID (Email)</label>
+                        <label className={email ? styles.floating : ""}>Access Key (Email)</label>
                         <input
                             type="email"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
-                            placeholder="e.g. zackawudu@ai-africa.com"
+                            placeholder={email ? "" : "zackawudu@ai-africa.com"}
                             required
+                            className={styles.input}
                         />
                     </div>
 
-                    <button type="submit" className={styles.loginBtn}>
-                        INITIATE LINK
-                    </button>
+                    <Button
+                        type="submit"
+                        variant="primary"
+                        className={styles.submitBtn}
+                        isLoading={isLoading}
+                    >
+                        Initiate Neural Link
+                    </Button>
                 </form>
-            </div>
+
+                <div className={styles.footer}>
+                    <span>Secure AES-512 Encrypted Link</span>
+                    <div className={styles.securityBar} />
+                </div>
+            </motion.div>
         </div>
     );
 }

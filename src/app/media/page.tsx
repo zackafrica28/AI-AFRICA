@@ -1,10 +1,12 @@
 "use client";
-import { useState } from "react";
-import FluxNavbar from "@/components/ui/FluxNavbar";
-import HolographicCard from "@/components/ui/HolographicCard";
-import styles from "./media.module.css";
 
-// Mock Trending News Data
+import React, { useState } from "react";
+import DashboardLayout from "@/components/layout/DashboardLayout";
+import HolographicCard from "@/components/ui/HolographicCard";
+import Button from "@/components/ui/Button";
+import styles from "./media.module.css";
+import { Play, Share2, Youtube, Radio, Activity } from "lucide-react";
+
 const MOCK_NEWS = [
     { id: 1, title: "African Tech Giants Merge for Quantum Leap", category: "Economy", timestamp: "10 mins ago" },
     { id: 2, title: "Islamic Banking Assets Hit $4 Trillion Milestone", category: "Finance", timestamp: "32 mins ago" },
@@ -19,7 +21,6 @@ export default function MediaCenter() {
     const handleAutoPublish = () => {
         setIsPublishing(true);
         setPublishStatus("SCANNING NEWS...");
-
         setTimeout(() => {
             setPublishStatus("GENERATING VIDEO SCRIPT...");
             setTimeout(() => {
@@ -29,7 +30,6 @@ export default function MediaCenter() {
                     setTimeout(() => {
                         setIsPublishing(false);
                         setPublishStatus("PUBLISHED SUCCESSFULLY ✅");
-                        alert("Video successfully published to YouTube channel!");
                     }, 3000);
                 }, 2000);
             }, 2000);
@@ -37,51 +37,72 @@ export default function MediaCenter() {
     };
 
     return (
-        <div className={styles.container}>
-            <FluxNavbar />
-
-            <main className={styles.main}>
+        <DashboardLayout>
+            <div className={styles.container}>
                 <header className={styles.header}>
                     <h1 className="neon-text">Holo-Media Center</h1>
-                    <p className={styles.subtitle}>The Voice of Africa • Automated Broadcasting Node</p>
+                    <p>The Voice of Africa • Automated Broadcasting Node</p>
                 </header>
 
-                <div className={styles.grid}>
-                    {/* News Feed Agreggator */}
-                    <section className={styles.newsSection}>
-                        <h2 className={styles.sectionTitle}>Global Intelligence Feed</h2>
-                        <div className={styles.newsList}>
-                            {MOCK_NEWS.map((news) => (
-                                <div key={news.id} className={styles.newsItem}>
-                                    <span className={styles.category}>{news.category}</span>
-                                    <h3 className={styles.newsTitle}>{news.title}</h3>
-                                    <span className={styles.timestamp}>{news.timestamp}</span>
-                                </div>
-                            ))}
-                        </div>
+                <div className={styles.layout}>
+                    <section className={styles.newsColumn}>
+                        <HolographicCard title="Global Intelligence Feed" subtitle="Live News Aggregator">
+                            <div className={styles.newsList}>
+                                {MOCK_NEWS.map((news) => (
+                                    <div key={news.id} className={styles.newsItem}>
+                                        <div className={styles.newsHeader}>
+                                            <span className={styles.category}>{news.category}</span>
+                                            <span className={styles.time}>{news.timestamp}</span>
+                                        </div>
+                                        <h3 className={styles.newsTitle}>{news.title}</h3>
+                                        <div className={styles.newsActions}>
+                                            <button><Play size={14} /> Listen</button>
+                                            <button><Share2 size={14} /> Share</button>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </HolographicCard>
                     </section>
 
-                    {/* Auto-Tube Controller */}
-                    <section className={styles.controlSection}>
-                        <HolographicCard className={styles.controlCard}>
-                            <h2 className={styles.cardTitle}>Auto-Tube Publisher</h2>
-                            <div className={styles.statusDisplay}>
-                                <div className={`${styles.indicator} ${isPublishing ? styles.active : ""}`} />
-                                <span className={styles.statusText}>{publishStatus}</span>
-                            </div>
+                    <section className={styles.controlColumn}>
+                        <HolographicCard title="Auto-Tube Publisher" variant="neon" interactive={false}>
+                            <div className={styles.publisherContent}>
+                                <div className={styles.statusBox}>
+                                    <div className={`${styles.indicator} ${isPublishing ? styles.active : ""}`} />
+                                    <span className={styles.statusText}>{publishStatus}</span>
+                                </div>
 
-                            <button
-                                className={styles.publishBtn}
-                                onClick={handleAutoPublish}
-                                disabled={isPublishing}
-                            >
-                                {isPublishing ? "PROCESSING..." : "INITIATE DAILY BROADCAST"}
-                            </button>
-                            <p className={styles.note}>Target Channel: <strong>AI-AFRICA</strong></p>
+                                <div className={styles.previewContainer}>
+                                    <div className={styles.monitor}>
+                                        {isPublishing ? (
+                                            <div className={styles.rendering}>
+                                                <Activity className={styles.pulseIcon} />
+                                                <p>NEURAL RENDERING IN PROGRESS</p>
+                                            </div>
+                                        ) : (
+                                            <div className={styles.idle}>
+                                                <Youtube size={48} className={styles.ytIcon} />
+                                                <p>STANDBY FOR BROADCAST</p>
+                                            </div>
+                                        )}
+                                    </div>
+                                </div>
+
+                                <Button
+                                    className={styles.publishBtn}
+                                    onClick={handleAutoPublish}
+                                    isLoading={isPublishing}
+                                    leftIcon={<Radio size={20} />}
+                                >
+                                    Initiate Daily Broadcast
+                                </Button>
+                                <p className={styles.channelLabel}>Target: <strong>AI-AFRICA Network</strong></p>
+                            </div>
                         </HolographicCard>
                     </section>
                 </div>
-            </main>
-        </div>
+            </div>
+        </DashboardLayout>
     );
 }

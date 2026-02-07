@@ -1,68 +1,87 @@
 "use client";
-import FluxNavbar from "@/components/ui/FluxNavbar";
+
+import React from "react";
+import DashboardLayout from "@/components/layout/DashboardLayout";
+import StatCard from "@/components/ui/StatCard";
 import HolographicCard from "@/components/ui/HolographicCard";
+import ThemeSwitcher from "@/components/ui/ThemeSwitcher";
+import {
+    TrendingUp,
+    Users,
+    ShoppingBag,
+    Activity,
+    Globe,
+    Zap,
+    ShieldCheck,
+    Cpu
+} from "lucide-react";
 import styles from "./dashboard.module.css";
-import { useRouter } from "next/navigation";
+import { motion } from "framer-motion";
 
-// Mock Data for 28 Sections
-const sections = [
-    { id: "dashboard", title: "My Dashboard", icon: "💎" },
-    { id: "buy", title: "Buy Marketplace", icon: "🛒" },
-    { id: "sell", title: "Sell Marketplace", icon: "🏷️" },
-    { id: "industries", title: "Industries Hall", icon: "🏭" },
-    { id: "small-firms", title: "Small Firms & SMEs", icon: "🏪" },
-    { id: "private-equity", title: "Private Equity", icon: "🤝" },
-    { id: "cash-flow", title: "Cash Flow & Finance", icon: "💸" },
-    { id: "real-estate-comm", title: "Commercial Real Estate", icon: "🏢" },
-    { id: "real-estate-res", title: "Residential Real Estate", icon: "🏠" },
-    { id: "cars", title: "Cars & Motors", icon: "🚗" },
-    { id: "companies-ex", title: "Companies Exchange", icon: "📈" },
-    { id: "manufacturing", title: "Manufacturing Hub", icon: "🏗️" },
-    { id: "goods-services", title: "Goods & Services", icon: "🛠️" },
-    { id: "oil-gas", title: "Oil & Gas Intel", icon: "🛢️" },
-    { id: "ai-os", title: "AI Business OS", icon: "🧠" },
-    { id: "media", title: "Holo-Media Center", icon: "📺" },
-    { id: "ceo", title: "CEO's Office", icon: "💼" },
-    { id: "investments", title: "Global Investments", icon: "🌐" },
-    { id: "products", title: "New Products", icon: "✨" },
-    { id: "deal-closer", title: "Smart Deal Closer", icon: "💳" },
-    { id: "crm", title: "Sentient CRM", icon: "👥" },
-    { id: "logistics", title: "Quantum Delivery", icon: "📦" },
-    { id: "hr", title: "Talent & HR", icon: "🧑‍🤝‍🧑" },
-    { id: "agri", title: "Agri-Tech Futures", icon: "🌾" },
-    { id: "energy", title: "Green Energy", icon: "⚡" },
-    { id: "policy", title: "Gov & Policy", icon: "🏛️" },
-    { id: "automator", title: "Neural Automator", icon: "🤖" },
-    { id: "settings", title: "System Settings", icon: "⚙️" },
-];
-
-export default function Dashboard() {
-    const router = useRouter();
-
+export default function DashboardPage() {
     return (
-        <div className={styles.container}>
-            <FluxNavbar />
+        <DashboardLayout>
+            <div className={styles.grid}>
+                {/* Welcome Section */}
+                <section className={styles.welcome}>
+                    <div className={styles.welcomeText}>
+                        <h1 className="neon-text">Neural Network Overview</h1>
+                        <p>System Status: <span className={styles.online}>Online</span> • Sector: Africa-Core-1</p>
+                    </div>
+                    <div className={styles.quickActions}>
+                        <ThemeSwitcher />
+                    </div>
+                </section>
 
-            <main className={styles.main}>
-                <header className={styles.header}>
-                    <h1 className="neon-text">Command Center</h1>
-                    <p className={styles.date}>2226 AD • Sector Africa</p>
-                </header>
+                {/* Stats Grid */}
+                <section className={styles.stats}>
+                    <StatCard label="Total Revenue" value="$4.2M" trend={{ value: 12, isUp: true }} icon={TrendingUp} />
+                    <StatCard label="Active Clients" value="12,482" trend={{ value: 8, isUp: true }} icon={Users} color="#7000ff" />
+                    <StatCard label="Global Orders" value="842" trend={{ value: 3, isUp: false }} icon={ShoppingBag} color="#10b981" />
+                    <StatCard label="System Sync" value="99.9%" icon={Activity} color="#f97316" />
+                </section>
 
-                <div className={styles.grid}>
-                    {sections.map((section) => (
-                        <HolographicCard
-                            key={section.id}
-                            title={section.title}
-                            className={styles.card}
-                            onClick={() => router.push(`/${section.id}`)}
-                        >
-                            <div className={styles.icon}>{section.icon}</div>
-                            <div className={styles.status}>System Active</div>
+                {/* Main Sections */}
+                <div className={styles.contentGrid}>
+                    <HolographicCard title="Live Intelligence Feed" subtitle="Real-time data stream">
+                        <div className={styles.feedPlaceholder}>
+                            {[1, 2, 3].map((i) => (
+                                <div key={i} className={styles.feedItem}>
+                                    <div className={styles.feedDot} />
+                                    <div className={styles.feedContent}>
+                                        <p className={styles.feedTitle}>New Procurement Request from Lagos Hub</p>
+                                        <span>Sector: Infrastructure • 2 mins ago</span>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </HolographicCard>
+
+                    <div className={styles.sideColumn}>
+                        <HolographicCard title="System Health" variant="neon">
+                            <div className={styles.healthStats}>
+                                <div className={styles.healthItem}>
+                                    <span>Processor Heat</span>
+                                    <div className={styles.progressBar}><div className={styles.progress} style={{ width: '45%' }} /></div>
+                                </div>
+                                <div className={styles.healthItem}>
+                                    <span>Bandwidth</span>
+                                    <div className={styles.progressBar}><div className={styles.progress} style={{ width: '82%' }} /></div>
+                                </div>
+                            </div>
                         </HolographicCard>
-                    ))}
+
+                        <HolographicCard title="Quick Terminal" interactive={false}>
+                            <div className={styles.terminal}>
+                                <p>> Initializing AI OS...</p>
+                                <p>> Neural link established.</p>
+                                <p>> Scanning for opportunities...</p>
+                                <motion.span animate={{ opacity: [1, 0] }} transition={{ repeat: Infinity, duration: 0.8 }}>_</motion.span>
+                            </div>
+                        </HolographicCard>
+                    </div>
                 </div>
-            </main>
-        </div>
+            </div>
+        </DashboardLayout>
     );
 }
