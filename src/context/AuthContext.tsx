@@ -1,69 +1,86 @@
 "use client";
 import { createContext, useState, useEffect, useContext } from "react";
 import { useRouter } from "next/navigation";
+import {
+    onAuthStateChanged,
+    signInWithEmailAndPassword,
+    signOut,
+    User as FirebaseUser
+} from "firebase/auth";
+import { auth, db } from "@/lib/firebase";
+import { doc, getDoc, setDoc } from "firebase/firestore";
 
-interface User {
+interface UserProfile {
     email: string;
     role: "CEO" | "SUBSCRIBER" | "GUEST";
-    subscriptionTier?: "TITANIUM" | "GOLD" | "NONE";
+    subscriptionTier: "TITANIUM" | "GOLD" | "NONE";
 }
 
 interface AuthContextType {
-    user: User | null;
-    login: (email: string) => void;
-    logout: () => void;
-    subscribe: (tier: "TITANIUM" | "GOLD") => void;
+    user: FirebaseUser | null;
+    profile: UserProfile | null;
+    loading: boolean;
+    login: (email: string, pass: string) => Promise<void>;
+    logout: () => Promise<void>;
     isAdmin: boolean;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-    const [user, setUser] = useState<User | null>(null);
+    const [user, setUser] = useState<FirebaseUser | null>(null);
+    const [profile, setProfile] = useState<UserProfile | null>(null);
+    const [loading, setLoading] = useState(true);
     const router = useRouter();
 
-    // Simulating persistent session
     useEffect(() => {
-        const storedUser = localStorage.getItem("ai_africa_user");
-        if (storedUser) {
-            setUser(JSON.parse(storedUser));
-        }
+        const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
+            setUser(firebaseUser);
+            if (firebaseUser) {
+                // Fetch profile from Firestore
+                const docRef = doc(db, "users", firebaseUser.uid);
+                const docSnap = await getDoc(docRef);
+
+                if (docSnap.exists()) {
+                    setProfile(docSnap.data() as UserProfile);
+                } else {
+                    // Create default profile if missing
+                    const newProfile: UserProfile = {
+                        email: firebaseUser.email || "",
+                        role: firebaseUser.email?.includes("zackawudu") ? "CEO" : "GUEST",
+                        subscriptionTier: "NONE"
+                    };
+                    await setDoc(docRef, newProfile);
+                    setProfile(newProfile);
+                }
+            } else {
+                setProfile(null);
+            }
+            setLoading(false);
+        });
+
+        return () => unsubscribe();
     }, []);
 
-    const login = (email: string) => {
-        // STRICT CEO CHECK
-        if (email.toLowerCase().includes("zackawudu")) {
-            const ceoUser: User = { email, role: "CEO", subscriptionTier: "TITANIUM" };
-            setUser(ceoUser);
-            localStorage.setItem("ai_africa_user", JSON.stringify(ceoUser));
+    const login = async (email: string, pass: string) => {
+        try {
+            await signInWithEmailAndPassword(auth, email, pass);
             router.push("/dashboard");
-        } else {
-            const guestUser: User = { email, role: "GUEST", subscriptionTier: "NONE" };
-            setUser(guestUser);
-            localStorage.setItem("ai_africa_user", JSON.stringify(guestUser));
-            router.push("/subscribe"); // Redirect non-CEOs to pay
+        } catch (error) {
+            console.error("Login failed:", error);
+            throw error;
         }
     };
 
-    const subscribe = (tier: "TITANIUM" | "GOLD") => {
-        if (user) {
-            const updatedUser: User = { ...user, role: "SUBSCRIBER", subscriptionTier: tier };
-            setUser(updatedUser);
-            localStorage.setItem("ai_africa_user", JSON.stringify(updatedUser));
-            router.push("/dashboard");
-        }
-    };
-
-    const logout = () => {
-        setUser(null);
-        localStorage.removeItem("ai_africa_user");
+    const logout = async () => {
+        await signOut(auth);
         router.push("/");
     };
 
-    const isAdmin = user?.role === "CEO";
+    const isAdmin = profile?.role === "CEO";
 
     return (
-        <AuthContext.Provider value={{ user, login, logout, subscribe, isAdmin }}>
+        <AuthContext.Provider value={{ user, profile, loading, login, logout, isAdmin }}>
             {children}
         </AuthContext.Provider>
     );
@@ -76,3 +93,4 @@ export function useAuth() {
     }
     return context;
 }
+

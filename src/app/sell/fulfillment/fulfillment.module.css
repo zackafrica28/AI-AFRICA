@@ -1,0 +1,70 @@
+.list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.orderCard {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 20px;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    transition: var(--transition);
+}
+
+.orderCard:hover {
+    border-color: var(--accent-muted);
+}
+
+.orderIcon {
+    width: 48px;
+    height: 48px;
+    background: var(--bg-tertiary);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--accent);
+}
+
+.orderInfo {
+    flex: 1;
+}
+
+.orderInfo h4 {
+    margin-bottom: 4px;
+}
+
+.orderInfo span {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+}
+
+.status {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.processing {
+    background: rgba(249, 115, 22, 0.1);
+    color: #f97316;
+}
+
+.intransit {
+    background: rgba(59, 130, 246, 0.1);
+    color: #3b82f6;
+}
+
+.completed {
+    background: rgba(16, 185, 129, 0.1);
+    color: #10b981;
+}

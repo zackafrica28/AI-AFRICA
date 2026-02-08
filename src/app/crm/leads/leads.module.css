@@ -1,0 +1,38 @@
+.header {
+    margin-bottom: 24px;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 24px;
+}
+
+.leadInfo {
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+}
+
+.valueLabel {
+    font-weight: 600;
+}
+
+.value {
+    color: var(--accent);
+    font-weight: 700;
+}
+
+.actions {
+    display: flex;
+    gap: 12px;
+}

@@ -1,0 +1,55 @@
+.list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.txCard {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 16px 24px;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+}
+
+.icon {
+    width: 40px;
+    height: 40px;
+    background: var(--bg-tertiary);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--accent);
+}
+
+.info {
+    flex: 1;
+}
+
+.info h3 {
+    font-size: 1rem;
+    margin-bottom: 4px;
+}
+
+.info p {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+}
+
+.price {
+    font-weight: 700;
+    color: var(--accent);
+}
+
+.statusBadge {
+    font-size: 0.65rem;
+    font-weight: 800;
+    background: rgba(16, 185, 129, 0.1);
+    color: #10b981;
+    padding: 4px 8px;
+    border-radius: 4px;
+    text-transform: uppercase;
+}

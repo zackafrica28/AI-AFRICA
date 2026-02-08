@@ -1,0 +1,94 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+}
+
+.header {
+    text-align: center;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 32px;
+}
+
+.card {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.recommended {
+    transform: scale(1.05);
+    z-index: 10;
+}
+
+.tierHeader {
+    text-align: center;
+    margin-bottom: 32px;
+}
+
+.tierName {
+    font-size: 1.5rem;
+    margin: 16px 0 8px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.price {
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
+    gap: 4px;
+}
+
+.currency {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--text-muted);
+}
+
+.amount {
+    font-size: 3rem;
+    font-weight: 900;
+    color: var(--text-primary);
+    font-family: var(--font-heading);
+}
+
+.period {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+}
+
+.features {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-bottom: 40px;
+    flex: 1;
+}
+
+.features li {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+}
+
+.check {
+    color: #10b981;
+}
+
+.cta {
+    width: 100%;
+}
+
+@media (max-width: 1024px) {
+    .recommended {
+        transform: none;
+    }
+}
