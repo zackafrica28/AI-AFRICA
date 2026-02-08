@@ -2,7 +2,7 @@
 import ModulePage from "@/components/ui/ModulePage";
 import HolographicCard from "@/components/ui/HolographicCard";
 import Button from "@/components/ui/Button";
-import {Lock, ShieldCheck, MapPin } from "lucide-react";
+import { Lock, ShieldCheck } from "lucide-react";
 import styles from "./checkout.module.css";
 
 export default function BuyCheckout() {
