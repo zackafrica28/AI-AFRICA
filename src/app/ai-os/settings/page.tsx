@@ -2,7 +2,7 @@
 import ModulePage from "@/components/ui/ModulePage";
 import HolographicCard from "@/components/ui/HolographicCard";
 import Button from "@/components/ui/Button";
-import { Shield, Globe } from "lucide-react";
+import { Shield, Globe, Terminal } from "lucide-react";
 import styles from "./settings.module.css";
 
 export default function AIOSSettings() {
@@ -39,6 +39,13 @@ export default function AIOSSettings() {
                             <span>Edge Deployment (Multi-Region)</span>
                         </div>
                         <div className={styles.switch} data-active="true"><div className={styles.knob} /></div>
+                    </div>
+                    <div className={styles.toggleItem}>
+                        <div className={styles.info}>
+                            <Terminal size={20} />
+                            <span>Root Access Logs</span>
+                        </div>
+                        <div className={styles.switch}><div className={styles.knob} /></div>
                     </div>
                 </HolographicCard>
             </div>
