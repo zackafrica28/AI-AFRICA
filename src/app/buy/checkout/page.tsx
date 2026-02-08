@@ -2,7 +2,7 @@
 import ModulePage from "@/components/ui/ModulePage";
 import HolographicCard from "@/components/ui/HolographicCard";
 import Button from "@/components/ui/Button";
-import { ShoppingLock, ShieldCheck, MapPin } from "lucide-react";
+import { Lock, ShieldCheck, MapPin } from "lucide-react";
 import styles from "./checkout.module.css";
 
 export default function BuyCheckout() {
@@ -24,7 +24,7 @@ export default function BuyCheckout() {
                     <HolographicCard title="Payment Method">
                         <div className={styles.payment}>
                             <div className={styles.cardInfo}>
-                                <ShoppingLock size={20} />
+                                <Lock size={20} />
                                 <span>•••• •••• •••• 4242</span>
                             </div>
                             <Button size="sm" variant="glass">Change</Button>
