@@ -1,26 +1,11 @@
 "use client";
 import ModulePage from "@/components/ui/ModulePage";
-import HolographicCard from "@/components/ui/HolographicCard";
-import { useRouter } from "next/navigation";
 
-export default function CEOPage() {
-    const router = useRouter();
-
+export default function Page() {
     return (
-        <ModulePage title="CEO's Office" subtitle="Executive Command & Control">
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '20px' }}>
-                <HolographicCard title="Executive Summary">
-                    <p>High-level KPIs and performance metrics.</p>
-                </HolographicCard>
-                <HolographicCard title="Strategic Plan">
-                    <p>AI-drafted 5-year growth roadmaps.</p>
-                </HolographicCard>
-                <HolographicCard title="Boardroom">
-                    <p>Virtual meeting space for stakeholders.</p>
-                </HolographicCard>
-                <HolographicCard title="System Settings" onClick={() => router.push('/settings')}>
-                    <p>Manage credentials and platform configuration.</p>
-                </HolographicCard>
+        <ModulePage title="CEO Office" subtitle="Executive Control">
+            <div className="p-8 border border-dashed border-gray-700 rounded-lg flex items-center justify-center">
+                <p className="text-gray-500">Restricted Access Area. Biometrics Required.</p>
             </div>
         </ModulePage>
     );

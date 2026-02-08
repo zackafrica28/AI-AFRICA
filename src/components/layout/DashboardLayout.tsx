@@ -2,28 +2,29 @@
 
 import React, { useState } from "react";
 import Sidebar from "./Sidebar";
-import Header from "./Header";
+import MobileNav from "./MobileNav";
 import styles from "./DashboardLayout.module.css";
-import { motion, AnimatePresence } from "framer-motion";
+import { usePathname } from "next/navigation";
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
     const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+    const pathname = usePathname();
+
+    // Pages that shouldn't have the dashboard layout (e.g., login, landing)
+    // Adjust logic as needed if using Route Groups instead
+    if (pathname === "/" || pathname === "/login" || pathname === "/signup") {
+        return <>{children}</>;
+    }
 
     return (
-        <div className={styles.container}>
+        <div className={styles.layout}>
             <Sidebar isOpen={isSidebarOpen} setIsOpen={setIsSidebarOpen} />
 
-            <div className={`${styles.main} ${isSidebarOpen ? styles.sidebarActive : ""}`}>
-                <Header toggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)} />
-                <motion.main
-                    initial={{ opacity: 0, x: 20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 0, x: -20 }}
-                    className={styles.content}
-                >
-                    {children}
-                </motion.main>
-            </div>
+            <main className={`${styles.mainContent} ${isSidebarOpen ? styles.shifted : styles.fullWidth}`}>
+                {children}
+            </main>
+
+            <MobileNav />
         </div>
     );
 }

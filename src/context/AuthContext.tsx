@@ -12,8 +12,10 @@ import { doc, getDoc, setDoc } from "firebase/firestore";
 
 interface UserProfile {
     email: string;
-    role: "CEO" | "SUBSCRIBER" | "GUEST";
+    role: "CEO" | "SUBSCRIBER" | "GUEST" | "VENDOR";
     subscriptionTier: "TITANIUM" | "GOLD" | "NONE";
+    createdAt?: string;
+    activeModules?: string[];
 }
 
 interface AuthContextType {
@@ -39,19 +41,32 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             if (firebaseUser) {
                 // Fetch profile from Firestore
                 const docRef = doc(db, "users", firebaseUser.uid);
-                const docSnap = await getDoc(docRef);
 
-                if (docSnap.exists()) {
-                    setProfile(docSnap.data() as UserProfile);
-                } else {
-                    // Create default profile if missing
-                    const newProfile: UserProfile = {
+                try {
+                    const docSnap = await getDoc(docRef);
+
+                    if (docSnap.exists()) {
+                        setProfile(docSnap.data() as UserProfile);
+                    } else {
+                        // Create default profile if missing
+                        const newProfile: UserProfile = {
+                            email: firebaseUser.email || "",
+                            role: firebaseUser.email?.includes("zackawudu") ? "CEO" : "GUEST",
+                            subscriptionTier: "NONE",
+                            createdAt: new Date().toISOString(),
+                            activeModules: ["ai-os"]
+                        };
+                        await setDoc(docRef, newProfile);
+                        setProfile(newProfile);
+                    }
+                } catch (err) {
+                    console.error("Error fetching user profile:", err);
+                    // Fallback to basic profile to allow login even if DB fails
+                    setProfile({
                         email: firebaseUser.email || "",
-                        role: firebaseUser.email?.includes("zackawudu") ? "CEO" : "GUEST",
+                        role: "GUEST",
                         subscriptionTier: "NONE"
-                    };
-                    await setDoc(docRef, newProfile);
-                    setProfile(newProfile);
+                    });
                 }
             } else {
                 setProfile(null);

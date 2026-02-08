@@ -1,23 +1,11 @@
 "use client";
 import ModulePage from "@/components/ui/ModulePage";
-import HolographicCard from "@/components/ui/HolographicCard";
 
-export default function InvestmentsPage() {
+export default function Page() {
     return (
-        <ModulePage title="Global Investments" subtitle="Stocks, Crypto, & Assets">
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '20px' }}>
-                <HolographicCard title="Stock Markets">
-                    <p>Real-time data from Johannesburg, Lagos, Nairobi, & Global exchanges.</p>
-                </HolographicCard>
-                <HolographicCard title="Crypto Vault">
-                    <p>Secure digital asset management and trading.</p>
-                </HolographicCard>
-                <HolographicCard title="Gov Bonds">
-                    <p>Stable returns from African sovereign debt.</p>
-                </HolographicCard>
-                <HolographicCard title="Angel Investing">
-                    <p>Discover high-growth startups before they IPO.</p>
-                </HolographicCard>
+        <ModulePage title="Investments" subtitle="Portfolio & Market Analysis">
+            <div className="p-8 border border-dashed border-gray-700 rounded-lg flex items-center justify-center">
+                <p className="text-gray-500">Connecting to Stock Markets...</p>
             </div>
         </ModulePage>
     );
