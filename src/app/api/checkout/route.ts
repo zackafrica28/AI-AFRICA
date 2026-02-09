@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 
-export async function POST(request: Request) {
+export async function POST(_request: Request) {
     try {
         // const body = await request.json();
         // 1. Validate items in DB
