@@ -7,7 +7,7 @@ import Button from "@/components/ui/Button";
 import { TrendingUp, Package, DollarSign, Plus, Globe } from "lucide-react";
 import styles from "./sell.module.css";
 import { useAuth } from "@/context/AuthContext";
-import { getVendorProfile, getVendorAnalytics } from "@/server/actions/vendor";
+import { getVendorProfile, getVendorAnalytics, createVendor } from "@/server/actions/vendor";
 import Link from "next/link";
 
 interface Analytics {
@@ -46,6 +46,24 @@ export default function SellPage() {
         loadVendorData();
     }, [user?.uid]);
 
+    const handleInitialize = async () => {
+        if (!user?.uid) return;
+        setLoading(true);
+        try {
+            await createVendor(user.uid, user.displayName || "New Vendor", "Global Distributor on AI-AFRICA");
+            // Refresh vendor data
+            const profile = await getVendorProfile(user.uid);
+            setVendor(profile);
+            const stats = await getVendorAnalytics(profile!.id);
+            setAnalytics(stats);
+        } catch (error) {
+            console.error("Failed to initialize vendor:", error);
+            alert("Neural link failed. Please retry initialization.");
+        } finally {
+            setLoading(false);
+        }
+    };
+
     if (loading) return <ModulePage title="Syncing Node..." subtitle="Verifying vendor credentials."><div className="neon-spinner"></div></ModulePage>;
 
     if (!vendor) {
@@ -69,7 +87,13 @@ export default function SellPage() {
                                 </div>
                             </div>
                         </div>
-                        <Button className={styles.cta} variant="primary">Initialize Account</Button>
+                        <Button
+                            className={styles.cta}
+                            variant="primary"
+                            onClick={handleInitialize}
+                        >
+                            Initialize Account
+                        </Button>
                     </HolographicCard>
                 </div>
             </ModulePage>

@@ -35,6 +35,19 @@ export async function getVendorAnalytics(vendorId: string) {
 }
 
 /**
+ * Creates a new vendor profile for a user.
+ */
+export async function createVendor(userId: string, name: string, description: string) {
+    return await prisma.vendor.create({
+        data: {
+            userId,
+            name,
+            description,
+        }
+    });
+}
+
+/**
  * Updates vendor status or profile.
  */
 export async function updateVendorProfile(vendorId: string, data: any) {
