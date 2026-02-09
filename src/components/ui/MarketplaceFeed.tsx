@@ -2,72 +2,104 @@
 
 import { useEffect, useState } from "react";
 import ProductCard from "./ProductCard";
+import Button from "./Button";
 import styles from "./MarketplaceFeed.module.css";
 
 interface Product {
     id: string;
     title: string;
     price: number;
-    images: string[];
     category: string;
-    vendor: {
+    images: string[];
+    vendor?: {
         name: string;
-    };
+    }
 }
 
-export default function MarketplaceFeed({ category }: { category?: string }) {
+export default function MarketplaceFeed() {
     const [products, setProducts] = useState<Product[]>([]);
     const [loading, setLoading] = useState(true);
+    const [offset, setOffset] = useState(0);
+    const [category, setCategory] = useState("All");
+    const [hasMore, setHasMore] = useState(true);
+    const limit = 8;
+
+    const categories = ["All", "Software", "Real Estate", "Electronics", "Logistics", "Energy"];
+
+    const fetchProducts = async (newOffset: number, newCategory: string, reset: boolean = false) => {
+        setLoading(true);
+        try {
+            const catParam = newCategory === "All" ? "" : `&category=${encodeURIComponent(newCategory)}`;
+            const res = await fetch(`/api/products?limit=${limit}&offset=${newOffset}${catParam}`);
+            const data: Product[] = await res.json();
+
+            if (reset) {
+                setProducts(data);
+            } else {
+                setProducts((prev) => [...prev, ...data]);
+            }
+
+            if (data.length < limit) setHasMore(false);
+            else setHasMore(true);
+        } catch (error) {
+            console.error("Failed to load products:", error);
+        } finally {
+            setLoading(false);
+        }
+    };
 
     useEffect(() => {
-        async function fetchProducts() {
-            try {
-                const url = category
-                    ? `/api/products?category=${encodeURIComponent(category)}`
-                    : "/api/products";
-                const res = await fetch(url);
-                const data = await res.json();
-                setProducts(data);
-            } catch (error) {
-                console.error("Failed to load products:", error);
-            } finally {
-                setLoading(false);
-            }
-        }
+        fetchProducts(0, "All", true);
+    }, []);
 
-        fetchProducts();
-    }, [category]);
+    const handleCategoryChange = (cat: string) => {
+        setCategory(cat);
+        setOffset(0);
+        fetchProducts(0, cat, true);
+    };
 
-    if (loading) {
-        return (
-            <div className={styles.loader}>
-                <div className="neon-spinner"></div>
-                <p>Syncing Marketplace Nodes...</p>
-            </div>
-        );
-    }
-
-    if (products.length === 0) {
-        return (
-            <div className={styles.empty}>
-                <p>No neural assets found in this sector.</p>
-            </div>
-        );
-    }
+    const handleLoadMore = () => {
+        const nextOffset = offset + limit;
+        setOffset(nextOffset);
+        fetchProducts(nextOffset, category);
+    };
 
     return (
-        <div className={styles.grid}>
-            {products.map((product) => (
-                <ProductCard
-                    key={product.id}
-                    id={product.id}
-                    title={product.title}
-                    price={product.price}
-                    image={product.images[0] || "https://via.placeholder.com/400"}
-                    category={product.category}
-                    vendorName={product.vendor.name}
-                />
-            ))}
+        <div className={styles.container}>
+            <div className={styles.filterBar}>
+                {categories.map(cat => (
+                    <button
+                        key={cat}
+                        className={`${styles.filterBtn} ${category === cat ? styles.active : ''}`}
+                        onClick={() => handleCategoryChange(cat)}
+                    >
+                        {cat}
+                    </button>
+                ))}
+            </div>
+
+            <div className={styles.feed}>
+                {products.length === 0 && !loading ? (
+                    <div className={styles.empty}>No assets found in this sector.</div>
+                ) : (
+                    products.map((p) => (
+                        <ProductCard key={p.id} product={p} />
+                    ))
+                )}
+            </div>
+
+            {loading && (
+                <div className={styles.loading}>
+                    <div className="neon-spinner"></div>
+                    <p>Synchronizing Nodes...</p>
+                </div>
+            )}
+
+            {hasMore && !loading && (
+                <div className={styles.footer}>
+                    <Button variant="glass" onClick={handleLoadMore}>Load More Assets</Button>
+                </div>
+            )}
         </div>
     );
 }

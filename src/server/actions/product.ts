@@ -1,6 +1,14 @@
-"use server";
-
-import prisma from "@/lib/prisma";
+/**
+ * Fetches all products with optional filters.
+ */
+export async function getProducts(limit: number = 12, offset: number = 0, category?: string) {
+    return await prisma.product.findMany({
+        where: category ? { category } : {},
+        take: limit,
+        skip: offset,
+        orderBy: { createdAt: "desc" },
+    });
+}
 
 /**
  * Creates a new product for a vendor.
