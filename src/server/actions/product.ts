@@ -2,43 +2,33 @@
 
 import prisma from "@/lib/prisma";
 
-export async function getProducts(options: {
-    category?: string;
-    limit?: number;
-    offset?: number;
-} = {}) {
-    const { category, limit = 20, offset = 0 } = options;
-
-    try {
-        const products = await prisma.product.findMany({
-            where: category ? { category } : {},
-            take: limit,
-            skip: offset,
-            include: {
-                vendor: true,
-            },
-            orderBy: {
-                createdAt: "desc",
-            },
-        });
-
-        return products;
-    } catch (error) {
-        console.error("Error fetching products:", error);
-        return [];
-    }
+/**
+ * Creates a new product for a vendor.
+ */
+export async function createProduct(vendorId: string, data: any) {
+    return await prisma.product.create({
+        data: {
+            ...data,
+            vendorId,
+        }
+    });
 }
 
-export async function getProductById(id: string) {
-    try {
-        return await prisma.product.findUnique({
-            where: { id },
-            include: {
-                vendor: true,
-            },
-        });
-    } catch (error) {
-        console.error("Error fetching product by ID:", error);
-        return null;
-    }
+/**
+ * Fetches all products for a specific vendor.
+ */
+export async function getVendorProducts(vendorId: string) {
+    return await prisma.product.findMany({
+        where: { vendorId },
+        orderBy: { createdAt: "desc" }
+    });
+}
+
+/**
+ * Deletes a product.
+ */
+export async function deleteProduct(productId: string, vendorId: string) {
+    return await prisma.product.delete({
+        where: { id: productId, vendorId }
+    });
 }

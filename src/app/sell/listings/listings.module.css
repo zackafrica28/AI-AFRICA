@@ -2,88 +2,65 @@
     margin-bottom: 32px;
 }
 
-.table {
-    background: var(--bg-secondary);
-    border: 1px solid var(--border);
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 24px;
+}
+
+.empty {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 60px;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px dashed rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    color: var(--text-secondary);
+}
+
+.card {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 12px;
     overflow: hidden;
+    transition: transform 0.2s, border-color 0.2s;
 }
 
-.thead {
-    display: grid;
-    grid-template-columns: 2fr 1fr 1fr 1fr 1fr;
-    padding: 16px 24px;
-    background: var(--bg-tertiary);
-    font-size: 0.75rem;
-    font-weight: 700;
-    color: var(--text-muted);
-    text-transform: uppercase;
-    letter-spacing: 1px;
+.card:hover {
+    transform: translateY(-4px);
+    border-color: var(--neon-blue);
 }
 
-.trow {
-    display: grid;
-    grid-template-columns: 2fr 1fr 1fr 1fr 1fr;
-    padding: 20px 24px;
-    border-bottom: 1px solid var(--border);
-    font-size: 0.9rem;
-    align-items: center;
-    transition: var(--transition);
+.media {
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    background: #000;
 }
 
-.trow:last-child {
-    border-bottom: none;
+.media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 }
 
-.trow:hover {
-    background: rgba(255, 255, 255, 0.02);
+.info {
+    padding: 16px;
 }
 
-.name {
-    font-weight: 600;
+.info h3 {
+    margin: 0 0 4px 0;
+    font-size: 1.1rem;
     color: var(--text-primary);
 }
 
-.status {
-    font-size: 0.7rem;
-    font-weight: 800;
-    padding: 4px 8px;
-    border-radius: 4px;
-    text-transform: uppercase;
-    width: fit-content;
-}
-
-.active {
-    background: rgba(16, 185, 129, 0.1);
-    color: #10b981;
-}
-
-.review {
-    background: rgba(249, 115, 22, 0.1);
-    color: #f97316;
+.info p {
+    margin: 0;
+    font-size: 0.9rem;
+    color: var(--text-secondary);
 }
 
 .actions {
     display: flex;
-    gap: 16px;
-    color: var(--text-muted);
-}
-
-.actions button:hover {
-    color: var(--accent);
-}
-
-.delete:hover {
-    color: #f43f5e !important;
-}
-
-@media (max-width: 800px) {
-    .thead {
-        display: none;
-    }
-
-    .trow {
-        grid-template-columns: 1fr;
-        gap: 12px;
-    }
+    gap: 8px;
+    padding: 0 16px 16px 16px;
 }
