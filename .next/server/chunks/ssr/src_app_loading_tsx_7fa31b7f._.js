@@ -1,3 +1,0 @@
-module.exports=[402747,a=>{"use strict";var b=a.i(907997);function c(){return(0,b.jsx)("div",{className:"flex items-center justify-center h-screen bg-black text-cyan-400 font-orbitron",children:(0,b.jsxs)("div",{className:"text-center",children:[(0,b.jsx)("div",{className:"animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-cyan-500 mb-4 mx-auto"}),(0,b.jsx)("h2",{className:"text-2xl animate-pulse",children:"INITIALIZING NEURAL LINK..."}),(0,b.jsx)("p",{className:"text-sm text-gray-500 mt-2",children:"Connecting to AI-AFRICA Server Grid"})]})})}a.s(["default",()=>c])}];
-
-//# sourceMappingURL=src_app_loading_tsx_7fa31b7f._.js.map
