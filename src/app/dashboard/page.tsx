@@ -9,14 +9,13 @@ import {
     ShoppingBag,
     Activity,
     Zap,
-    ShieldCheck,
     Cpu,
     Bell,
     ArrowRight,
     Plus
 } from "lucide-react";
 import styles from "./dashboard.module.css";
-import { motion } from "framer-motion";
+
 import Link from "next/link";
 import { useAuth } from "@/context/AuthContext";
 

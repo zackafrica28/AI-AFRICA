@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { motion } from "framer-motion";
+
 import styles from "./StatCard.module.css";
 import { LucideIcon } from "lucide-react";
 

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import styles from "./landing.module.css";
@@ -38,7 +38,7 @@ export default function LandingPage() {
           <div className={styles.tag}>EST. 2226 AD • Sector Africa</div>
           <h1 className={`${styles.title} neon-text`}>AI-AFRICA</h1>
           <p className={styles.subtitle}>
-            The continent's premier autonomous business intelligence node.
+            The continent&apos;s premier autonomous business intelligence node.
             Dominate global trade with sentient AI agents.
           </p>
         </motion.div>

@@ -1,7 +1,7 @@
 "use client";
 import ModulePage from "@/components/ui/ModulePage";
 import styles from "./pipeline.module.css";
-import { motion } from "framer-motion";
+
 
 const stages = ["PROSPECTING", "QUALIFICATION", "PROPOSAL", "NEGOTIATION", "CLOSED"];
 

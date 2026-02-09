@@ -12,14 +12,13 @@ interface ThemeContextType {
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
-    const [theme, setTheme] = useState<Theme>("dark");
-
-    useEffect(() => {
-        const savedTheme = localStorage.getItem("ai-africa-theme") as Theme;
-        if (savedTheme) {
-            setTheme(savedTheme);
+    const [theme, setTheme] = useState<Theme>(() => {
+        if (typeof window !== "undefined") {
+            const saved = localStorage.getItem("ai-africa-theme") as Theme;
+            return saved || "dark";
         }
-    }, []);
+        return "dark";
+    });
 
     useEffect(() => {
         document.documentElement.setAttribute("data-theme", theme);

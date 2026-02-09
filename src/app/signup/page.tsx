@@ -2,7 +2,6 @@
 
 import React, { useState } from "react";
 import { motion } from "framer-motion";
-import { useAuth } from "@/context/AuthContext";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth, db } from "@/lib/firebase"; // Direct import for creation
 import { doc, setDoc } from "firebase/firestore";
@@ -47,9 +46,10 @@ export default function SignupPage() {
 
             // Redirect to onboarding or dashboard
             router.push("/dashboard");
-        } catch (err: any) {
+        } catch (err: unknown) {
             console.error(err);
-            setError("Registration Failed: " + err.message);
+            const errorMessage = err instanceof Error ? err.message : "Unknown error";
+            setError("Registration Failed: " + errorMessage);
         } finally {
             setIsLoading(false);
         }

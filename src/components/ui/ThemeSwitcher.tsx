@@ -1,11 +1,10 @@
 "use client";
 
-import React from "react";
 import { useTheme, Theme } from "@/context/ThemeContext";
-import { Moon, Sun, Monitor, Droplets, Sunset } from "lucide-react";
+import { Moon, Droplets, Sunset } from "lucide-react";
 import styles from "./ThemeSwitcher.module.css";
 
-const themes: { id: Theme; icon: any; label: string }[] = [
+const themes: { id: Theme; icon: React.ElementType; label: string }[] = [
     { id: "dark", icon: Moon, label: "Dark" },
     { id: "wine", icon: Droplets, label: "Wine" },
     { id: "slates", icon: Sunset, label: "Orange" }, // Using 'slates' as placeholder for orange if needed or rename

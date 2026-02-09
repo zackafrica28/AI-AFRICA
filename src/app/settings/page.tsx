@@ -6,7 +6,7 @@ import HolographicCard from "@/components/ui/HolographicCard";
 import Button from "@/components/ui/Button";
 import ThemeSwitcher from "@/components/ui/ThemeSwitcher";
 import styles from "./settings.module.css";
-import { Shield, Key, Eye, EyeOff, Save } from "lucide-react";
+import { Shield, Eye, EyeOff, Save } from "lucide-react";
 
 export default function SettingsPage() {
     const [showPassword, setShowPassword] = useState(false);

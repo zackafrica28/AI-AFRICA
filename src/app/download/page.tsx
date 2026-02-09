@@ -61,9 +61,9 @@ export default function DownloadPage() {
                 <h2>How to Install (Web App)</h2>
                 <p>You can also install directly from this browser:</p>
                 <div className={styles.steps}>
-                    <span>1. Click 'Share' or 'Menu'</span>
+                    <span>1. Click &apos;Share&apos; or &apos;Menu&apos;</span>
                     <span>➜</span>
-                    <span>2. Select 'Add to Home Screen'</span>
+                    <span>2. Select &apos;Add to Home Screen&apos;</span>
                     <span>➜</span>
                     <span>3. Launch AI-AFRICA</span>
                 </div>

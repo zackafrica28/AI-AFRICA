@@ -7,7 +7,6 @@ import styles from "./login.module.css";
 import Button from "@/components/ui/Button";
 import Input from "@/components/ui/Input";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { Fingerprint } from "lucide-react";
 
 export default function LoginPage() {
@@ -16,7 +15,6 @@ export default function LoginPage() {
     const [error, setError] = useState("");
     const [isLoading, setIsLoading] = useState(false);
     const { login } = useAuth();
-    const router = useRouter();
 
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -26,7 +24,7 @@ export default function LoginPage() {
         try {
             await login(email, password);
             // Login successful - AuthContext handles redirect
-        } catch (err: any) {
+        } catch (err: unknown) {
             console.error(err);
             setError("Authentication Failed: Invalid Credentials");
         } finally {
