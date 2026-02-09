@@ -1,11 +1,11 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useSearchParams, useRouter } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import ModulePage from "@/components/ui/ModulePage";
 import HolographicCard from "@/components/ui/HolographicCard";
 import Button from "@/components/ui/Button";
-import { Lock, ShieldCheck } from "lucide-react";
+import { ShieldCheck } from "lucide-react";
 import styles from "./checkout.module.css";
 import { useAuth } from "@/context/AuthContext";
 
@@ -19,7 +19,6 @@ export default function BuyCheckout() {
     const searchParams = useSearchParams();
     const productId = searchParams.get("id");
     const { user } = useAuth();
-    const router = useRouter();
     const [product, setProduct] = useState<Product | null>(null);
     const [loading, setLoading] = useState(true);
     const [processing, setProcessing] = useState(false);
