@@ -1,6 +1,5 @@
 "use client";
 import ModulePage from "@/components/ui/ModulePage";
-import HolographicCard from "@/components/ui/HolographicCard";
 import { Package, Truck, CheckCircle, Clock } from "lucide-react";
 import styles from "./fulfillment.module.css";
 
