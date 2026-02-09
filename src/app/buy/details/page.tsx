@@ -2,7 +2,7 @@
 import ModulePage from "@/components/ui/ModulePage";
 import HolographicCard from "@/components/ui/HolographicCard";
 import Button from "@/components/ui/Button";
-import { ChevronRight, ShieldCheck, Truck, RefreshCcw } from "lucide-react";
+import { ShieldCheck, Truck, RefreshCcw } from "lucide-react";
 import styles from "./details.module.css";
 import Link from "next/link";
 

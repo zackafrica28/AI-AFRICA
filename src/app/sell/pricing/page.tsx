@@ -2,7 +2,7 @@
 import ModulePage from "@/components/ui/ModulePage";
 import HolographicCard from "@/components/ui/HolographicCard";
 import Button from "@/components/ui/Button";
-import { DollarSign, Tag, TrendingDown, Target } from "lucide-react";
+
 import styles from "./pricing.module.css";
 
 export default function SellPricing() {

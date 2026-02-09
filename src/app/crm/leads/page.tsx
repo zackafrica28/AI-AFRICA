@@ -2,7 +2,7 @@
 import ModulePage from "@/components/ui/ModulePage";
 import HolographicCard from "@/components/ui/HolographicCard";
 import Button from "@/components/ui/Button";
-import { UserPlus, Mail, Phone } from "lucide-react";
+import { UserPlus, Mail } from "lucide-react";
 import styles from "./leads.module.css";
 
 export default function CRMLeads() {

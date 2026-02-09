@@ -1,9 +1,7 @@
 "use client";
 
-import React from "react";
 import DashboardLayout from "@/components/layout/DashboardLayout";
-import { motion } from "framer-motion";
-import { Activity, ShieldCheck, Zap, Server, Globe, Database } from "lucide-react";
+import { Activity, ShieldCheck, Zap, Globe } from "lucide-react";
 import HolographicCard from "@/components/ui/HolographicCard";
 
 import { useAuth } from "@/context/AuthContext";

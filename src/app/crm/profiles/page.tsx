@@ -2,7 +2,7 @@
 import ModulePage from "@/components/ui/ModulePage";
 import HolographicCard from "@/components/ui/HolographicCard";
 import Button from "@/components/ui/Button";
-import { User, Mail, Globe, Briefcase, Bookmark } from "lucide-react";
+import { Mail, Briefcase, Bookmark } from "lucide-react";
 import styles from "./profiles.module.css";
 
 export default function CRMProfiles() {

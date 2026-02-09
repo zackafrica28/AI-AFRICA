@@ -1,7 +1,7 @@
 "use client";
 import ModulePage from "@/components/ui/ModulePage";
-import HolographicCard from "@/components/ui/HolographicCard";
-import { Clock, Download, Package } from "lucide-react";
+
+import { Download, Package } from "lucide-react";
 import styles from "./history.module.css";
 import Button from "@/components/ui/Button";
 
