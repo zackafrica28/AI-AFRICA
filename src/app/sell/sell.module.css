@@ -1,0 +1,99 @@
+.onboarding {
+    max-width: 600px;
+    margin: 40px auto;
+}
+
+.benefits {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    margin-bottom: 32px;
+}
+
+.benefit {
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+}
+
+.benefit h4 {
+    margin: 0 0 4px 0;
+    color: var(--neon-blue);
+    font-size: 1.1rem;
+}
+
+.benefit p {
+    margin: 0;
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+}
+
+.cta {
+    width: 100%;
+}
+
+.dashboardGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 24px;
+    margin-bottom: 32px;
+}
+
+.statValue {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin: 16px 0 8px 0;
+}
+
+.statValue span {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    font-family: 'Space Grotesk', sans-serif;
+}
+
+.statSubtitle {
+    font-size: 0.85rem;
+    color: var(--neon-green);
+    margin: 0;
+}
+
+.actions {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 32px;
+}
+
+.wideSection {
+    margin-top: 32px;
+}
+
+.table {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.row {
+    display: grid;
+    grid-template-columns: 2fr 1fr 100px;
+    padding: 12px;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 8px;
+    align-items: center;
+}
+
+.status {
+    color: var(--neon-green);
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-align: right;
+}
+
+.empty {
+    text-align: center;
+    padding: 40px;
+    color: var(--text-secondary);
+    font-style: italic;
+}
