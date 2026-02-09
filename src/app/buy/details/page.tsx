@@ -4,6 +4,7 @@ import HolographicCard from "@/components/ui/HolographicCard";
 import Button from "@/components/ui/Button";
 import { ShieldCheck, Truck, RefreshCcw } from "lucide-react";
 import styles from "./details.module.css";
+import Image from "next/image";
 import Link from "next/link";
 
 export default function ProductDetails() {
@@ -12,7 +13,7 @@ export default function ProductDetails() {
             <div className={styles.layout}>
                 <div className={styles.main}>
                     <HolographicCard variant="glass" className={styles.visuals}>
-                        <img src="https://via.placeholder.com/600x400" alt="Product" />
+                        <Image src="https://via.placeholder.com/600x400" alt="Product" width={600} height={400} className="w-full h-auto" />
                     </HolographicCard>
 
                     <div className={styles.tabs}>
