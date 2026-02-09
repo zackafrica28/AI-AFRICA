@@ -1,32 +1,76 @@
 "use client";
-import ModulePage from "@/components/ui/ModulePage";
 
+import { useEffect, useState } from "react";
+import ModulePage from "@/components/ui/ModulePage";
 import { Download, Package } from "lucide-react";
 import styles from "./history.module.css";
 import Button from "@/components/ui/Button";
+import { useAuth } from "@/context/AuthContext";
+import { getUserOrders } from "@/server/actions/order";
+
+interface Order {
+    id: string;
+    createdAt: Date;
+    total: number;
+    status: string;
+    items: {
+        product: {
+            title: string;
+        };
+    }[];
+}
 
 export default function BuyHistory() {
-    const history = [
-        { id: "TX-9421", item: "Neural Vision Pro", date: "Jan 12, 2026", price: "$850.00", status: "Delivered" },
-        { id: "TX-8832", item: "Solar Grid Link", date: "Dec 28, 2025", price: "$2,400.00", status: "Delivered" },
-    ];
+    const { user } = useAuth();
+    const [orders, setOrders] = useState<Order[]>([]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        if (!user?.email) {
+            setLoading(false);
+            return;
+        }
+
+        async function fetchOrders() {
+            try {
+                const data = await getUserOrders(user!.email!);
+                // Convert Prisma result to our interface if needed
+                setOrders(data as any);
+            } catch (error) {
+                console.error("Error loading order history:", error);
+            } finally {
+                setLoading(false);
+            }
+        }
+
+        fetchOrders();
+    }, [user?.email]);
 
     return (
         <ModulePage title="Transaction History" subtitle="Comprehensive log of all neural and physical acquisitions.">
-            <div className={styles.list}>
-                {history.map((tx) => (
-                    <div key={tx.id} className={styles.txCard}>
-                        <div className={styles.icon}><Package size={20} /></div>
-                        <div className={styles.info}>
-                            <h3>{tx.item}</h3>
-                            <p>ID: {tx.id} • {tx.date}</p>
+            {loading ? (
+                <div className="neon-spinner"></div>
+            ) : orders.length === 0 ? (
+                <div className={styles.empty}>
+                    <p>No transaction logs detected in local nodes.</p>
+                </div>
+            ) : (
+                <div className={styles.list}>
+                    {orders.map((order) => (
+                        <div key={order.id} className={styles.txCard}>
+                            <div className={styles.icon}><Package size={20} /></div>
+                            <div className={styles.info}>
+                                <h3>{order.items[0]?.product.title || "Market Item"}</h3>
+                                <p>ID: {order.id.slice(0, 8)} • {new Date(order.createdAt).toLocaleDateString()}</p>
+                            </div>
+                            <div className={styles.price}>${order.total.toLocaleString()}</div>
+                            <div className={styles.statusBadge}>{order.status}</div>
+                            <Button size="sm" variant="glass" leftIcon={<Download size={14} />}>Invoice</Button>
                         </div>
-                        <div className={styles.price}>{tx.price}</div>
-                        <div className={styles.statusBadge}>{tx.status}</div>
-                        <Button size="sm" variant="glass" leftIcon={<Download size={14} />}>Invoice</Button>
-                    </div>
-                ))}
-            </div>
+                    ))}
+                </div>
+            )}
         </ModulePage>
     );
 }
+

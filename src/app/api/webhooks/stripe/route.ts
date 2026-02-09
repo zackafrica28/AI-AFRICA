@@ -7,7 +7,8 @@ const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET;
 
 export async function POST(request: Request) {
     const body = await request.text();
-    const sig = headers().get("stripe-signature") as string;
+    const headerList = await headers();
+    const sig = headerList.get("stripe-signature") as string;
 
     let event;
 
@@ -25,11 +26,11 @@ export async function POST(request: Request) {
 
             const productId = session.metadata.productId;
             const customerEmail = session.customer_details.email;
-            const amountTotal = session.amount_total / 100;
+            const amountTotal = (session.amount_total || 0) / 100;
 
             try {
                 // Record Order in DB
-                await prisma.$transaction(async (tx) => {
+                await prisma.$transaction(async (tx: any) => {
                     // Find User
                     const user = await tx.user.findUnique({
                         where: { email: customerEmail }
