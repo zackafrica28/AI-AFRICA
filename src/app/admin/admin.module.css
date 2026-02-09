@@ -1,0 +1,42 @@
+.statsGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 24px;
+    margin-bottom: 40px;
+}
+
+.stat {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin: 16px 0;
+}
+
+.stat span {
+    font-size: 2.2rem;
+    font-weight: 800;
+    color: var(--text-primary);
+    font-family: 'Space Grotesk', sans-serif;
+}
+
+.alertPanel {
+    margin-top: 24px;
+}
+
+.alert {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 16px;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 12px;
+    margin-bottom: 12px;
+}
+
+.warning {
+    color: #ff3e3e;
+}
+
+.info {
+    color: var(--neon-blue);
+}
