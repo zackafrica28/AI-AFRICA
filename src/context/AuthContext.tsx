@@ -9,6 +9,7 @@ import {
 } from "firebase/auth";
 import { auth, db } from "@/lib/firebase";
 import { doc, getDoc, setDoc } from "firebase/firestore";
+import { syncUserWithDb } from "@/lib/auth-sync";
 
 interface UserProfile {
     email: string;
@@ -39,6 +40,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
             setUser(firebaseUser);
             if (firebaseUser) {
+                // Sync with Postgres DB
+                syncUserWithDb(firebaseUser.uid, firebaseUser.email || "", firebaseUser.displayName || undefined)
+                    .catch(err => console.error("Postgres Sync Error:", err));
+
                 // Fetch profile from Firestore
                 const docRef = doc(db, "users", firebaseUser.uid);
 
