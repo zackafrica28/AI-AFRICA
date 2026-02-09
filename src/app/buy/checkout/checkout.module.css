@@ -70,6 +70,12 @@
     color: var(--text-primary);
 }
 
+.buttonGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
 .fullWidth {
     width: 100%;
 }

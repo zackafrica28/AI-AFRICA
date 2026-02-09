@@ -46,12 +46,13 @@ export default function BuyCheckout() {
         fetchProduct();
     }, [productId]);
 
-    const handleCheckout = async () => {
+    const handleCheckout = async (provider: 'stripe' | 'paystack') => {
         if (!product || !user) return;
         setProcessing(true);
 
         try {
-            const res = await fetch("/api/checkout", {
+            const endpoint = provider === 'stripe' ? "/api/checkout" : "/api/checkout/paystack";
+            const res = await fetch(endpoint, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
@@ -60,15 +61,17 @@ export default function BuyCheckout() {
                 }),
             });
 
-            const { url, error } = await res.json();
-            if (url) {
-                window.location.href = url;
+            const { url, error, data } = await res.json();
+            const redirectUrl = url || data?.authorization_url;
+
+            if (redirectUrl) {
+                window.location.href = redirectUrl;
             } else {
                 alert(error || "Failed to initiate checkout");
             }
         } catch (err) {
             console.error("Checkout failed:", err);
-            alert("Checkout system currently under neural maintenance.");
+            alert("Checkout system undergoing maintenance.");
         } finally {
             setProcessing(false);
         }
@@ -103,14 +106,24 @@ export default function BuyCheckout() {
                             <div className={styles.item}><span>Neural Delivery</span><span>$45.00</span></div>
                             <div className={styles.total}><span>Total</span><span>${total.toLocaleString()}</span></div>
                         </div>
-                        <Button
-                            className={styles.fullWidth}
-                            variant="primary"
-                            onClick={handleCheckout}
-                            disabled={processing}
-                        >
-                            {processing ? "Authorizing..." : "Authorize Purchase"}
-                        </Button>
+                        <div className={styles.buttonGroup}>
+                            <Button
+                                className={styles.fullWidth}
+                                variant="primary"
+                                onClick={() => handleCheckout('stripe')}
+                                disabled={processing}
+                            >
+                                {processing ? "Authorizing..." : "Authorize with Stripe"}
+                            </Button>
+                            <Button
+                                className={styles.fullWidth}
+                                variant="glass"
+                                onClick={() => handleCheckout('paystack')}
+                                disabled={processing}
+                            >
+                                {processing ? "Authorizing..." : "Authorize with Paystack"}
+                            </Button>
+                        </div>
                         <div className={styles.secure}>
                             <ShieldCheck size={14} />
                             <span>AES-512 Encrypted Transaction</span>
