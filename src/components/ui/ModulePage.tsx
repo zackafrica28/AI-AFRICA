@@ -1,6 +1,4 @@
 "use client";
-
-import React from "react";
 import FluxNavbar from "@/components/ui/FluxNavbar";
 import styles from "./ModulePage.module.css";
 import { useRouter } from "next/navigation";
