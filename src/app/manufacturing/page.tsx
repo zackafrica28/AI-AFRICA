@@ -1,6 +1,4 @@
 "use client";
-
-import React from "react";
 import ModulePage from "@/components/ui/ModulePage";
 import HolographicCard from "@/components/ui/HolographicCard";
 
