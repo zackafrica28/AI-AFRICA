@@ -1,6 +1,4 @@
 "use client";
-
-import React from "react";
 import FluxNavbar from "@/components/ui/FluxNavbar";
 import HolographicCard from "@/components/ui/HolographicCard";
 import styles from "./dashboard.module.css";
