@@ -1,7 +1,4 @@
 "use client";
-
-import React, { createContext, useContext, useState, useEffect } from "react";
-
 interface FeedItem {
     id: string;
     category: "REAL_ESTATE" | "CARS" | "TECH" | "COMMODITIES" | "STOCK";
