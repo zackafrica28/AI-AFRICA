@@ -1,6 +1,4 @@
 "use client";
-
-import React, { useState } from "react";
 import { useAuth } from "@/context/AuthContext";
 import styles from "./login.module.css";
 import FluxNavbar from "@/components/ui/FluxNavbar";
