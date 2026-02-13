@@ -1,6 +1,4 @@
 "use client";
-
-import React from "react";
 import { useAuth } from "@/context/AuthContext";
 import styles from "./subscribe.module.css";
 import FluxNavbar from "@/components/ui/FluxNavbar";
