@@ -1,6 +1,4 @@
 "use client";
-
-import React from "react";
 import { useLiveFeed } from "@/context/LiveFeedContext";
 import styles from "./HoloFeed.module.css";
 
