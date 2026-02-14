@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, FormEvent } from "react";
+import { useState} from "react";
 import { useAuth } from "@/context/AuthContext";
 import styles from "./login.module.css";
 import FluxNavbar from "@/components/ui/FluxNavbar";
