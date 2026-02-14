@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, FormEvent } from "react";
 import { useAuth } from "@/context/AuthContext";
 import styles from "./login.module.css";
 import FluxNavbar from "@/components/ui/FluxNavbar";
@@ -8,7 +8,7 @@ export default function LoginPage() {
     const [email, setEmail] = useState("");
     const { login } = useAuth();
 
-const handleLogin = (e: FormEvent) => {
+const handleLogin = (e: React.FormEvent) => {
         e.preventDefault();
         login(email);
     };
