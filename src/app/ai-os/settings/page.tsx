@@ -2,7 +2,7 @@
 import ModulePage from "@/components/ui/ModulePage";
 import HolographicCard from "@/components/ui/HolographicCard";
 import Button from "@/components/ui/Button";
-import { Key, Shield, Globe, Terminal } from "lucide-react";
+import {Shield, Globe, Terminal } from "lucide-react";
 import styles from "./settings.module.css";
 
 export default function AIOSSettings() {
