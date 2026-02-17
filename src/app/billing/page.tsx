@@ -2,7 +2,7 @@
 import ModulePage from "@/components/ui/ModulePage";
 import HolographicCard from "@/components/ui/HolographicCard";
 import Button from "@/components/ui/Button";
-import { CreditCard, History, Plus } from "lucide-react";
+import { CreditCard, Plus } from "lucide-react";
 import styles from "./billing.module.css";
 
 export default function BillingPage() {
