@@ -1,5 +1,4 @@
 "use client";
-
 import DashboardLayout from "@/components/layout/DashboardLayout";
 import { Activity, ShieldCheck, Zap, Globe } from "lucide-react";
 import HolographicCard from "@/components/ui/HolographicCard";
