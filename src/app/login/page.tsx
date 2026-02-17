@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import { useState } from "react";
 import { motion } from "framer-motion";
 import { useAuth } from "@/context/AuthContext";
 import styles from "./login.module.css";
@@ -16,7 +16,7 @@ export default function LoginPage() {
     const [isLoading, setIsLoading] = useState(false);
     const { login } = useAuth();
 
-    const handleLogin = async (e: React.FormEvent) => {
+const handleLogin = async (e: any) => {
         e.preventDefault();
         setError("");
         setIsLoading(true);
