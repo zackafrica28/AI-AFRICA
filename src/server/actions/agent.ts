@@ -1,6 +1,6 @@
 "use server";
 
-import prisma from "@/lib/prisma";
+import { prisma } from "@/lib/prisma";
 
 export async function getUserAgents(userId: string) {
     return await prisma.agent.findMany({
@@ -8,21 +8,20 @@ export async function getUserAgents(userId: string) {
     });
 }
 
-export async function createAgent(userId: string, type: string, config: any = {}) {
+export async function createAgent(userId: string, type: string) {
     return await prisma.agent.create({
         data: {
             userId,
             type,
-            config,
-            state: "IDLE",
+            active: true,
         },
     });
 }
 
-export async function updateAgentState(agentId: string, state: string) {
+export async function updateAgentState(agentId: string, active: boolean) {
     return await prisma.agent.update({
         where: { id: agentId },
-        data: { state },
+        data: { active },
     });
 }
 

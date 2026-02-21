@@ -1,13 +1,12 @@
 "use server";
 
-import prisma from "@/lib/prisma";
+import { prisma } from "@/lib/prisma";
 
 /**
  * Fetches all products with optional filters.
  */
-export async function getProducts(limit: number = 12, offset: number = 0, category?: string) {
+export async function getProducts(limit: number = 12, offset: number = 0) {
     return await prisma.product.findMany({
-        where: category ? { category } : {},
         take: limit,
         skip: offset,
         orderBy: { createdAt: "desc" },
@@ -21,29 +20,32 @@ export async function getProductById(id: string) {
     return await prisma.product.findUnique({
         where: { id },
         include: {
-            vendor: true
+            seller: true
         }
     });
 }
 
 /**
- * Creates a new product for a vendor.
+ * Creates a new product for a merchant/user.
  */
-export async function createProduct(vendorId: string, data: any) {
+export async function createProduct(sellerId: string, data: any) {
     return await prisma.product.create({
         data: {
-            ...data,
-            vendorId,
+            title: data.title,
+            description: data.description,
+            price: data.price,
+            image: data.image,
+            sellerId,
         }
     });
 }
 
 /**
- * Fetches all products for a specific vendor.
+ * Fetches all products for a specific seller.
  */
-export async function getVendorProducts(vendorId: string) {
+export async function getVendorProducts(sellerId: string) {
     return await prisma.product.findMany({
-        where: { vendorId },
+        where: { sellerId },
         orderBy: { createdAt: "desc" }
     });
 }
@@ -51,8 +53,8 @@ export async function getVendorProducts(vendorId: string) {
 /**
  * Deletes a product.
  */
-export async function deleteProduct(productId: string, vendorId: string) {
+export async function deleteProduct(productId: string, sellerId: string) {
     return await prisma.product.delete({
-        where: { id: productId, vendorId }
+        where: { id: productId, sellerId: sellerId }
     });
 }

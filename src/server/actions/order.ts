@@ -1,6 +1,4 @@
-"use server";
-
-import prisma from "@/lib/prisma";
+import { prisma } from "@/lib/prisma";
 
 /**
  * Fetches the order history for a specific user based on their email.
@@ -12,11 +10,7 @@ export async function getUserOrders(email: string) {
                 user: { email }
             },
             include: {
-                items: {
-                    include: {
-                        product: true
-                    }
-                }
+                product: true
             },
             orderBy: {
                 createdAt: "desc"

@@ -1,7 +1,8 @@
 import { NextResponse } from "next/server";
 import { headers } from "next/headers";
 import { stripe } from "@/lib/stripe";
-import prisma from "@/lib/prisma";
+import { prisma } from "@/lib/prisma";
+import { OrderStatus } from "@prisma/client";
 
 const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET;
 
@@ -42,23 +43,17 @@ export async function POST(request: Request) {
                     const order = await tx.order.create({
                         data: {
                             userId: user.id,
+                            productId: productId,
                             total: amountTotal,
-                            status: "PAID",
-                            items: {
-                                create: {
-                                    productId: productId,
-                                    quantity: 1,
-                                    price: amountTotal, // Simplified for single item
-                                }
-                            }
+                            status: OrderStatus.PAID,
                         }
                     });
 
-                    // Update Stock
+                    // Update Stock / Active
                     await tx.product.update({
                         where: { id: productId },
                         data: {
-                            stock: { decrement: 1 }
+                            active: true
                         }
                     });
 

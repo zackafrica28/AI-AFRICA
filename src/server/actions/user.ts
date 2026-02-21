@@ -1,6 +1,6 @@
 "use server";
 
-import prisma from "@/lib/prisma";
+import { prisma } from "@/lib/prisma";
 
 export async function getUserProfile(email: string) {
     return await prisma.user.findUnique({
@@ -38,7 +38,7 @@ export async function getUserAnalytics(userId: string) {
     if (!user) return null;
 
     const totalSpent = user.orders.reduce((sum: number, order: any) => sum + order.total, 0);
-    const activeAgents = user.agents.filter((a: any) => a.state === "RUNNING").length;
+    const activeAgents = user.agents.filter((a: any) => a.active === true).length;
 
     return {
         totalSpent,

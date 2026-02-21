@@ -7,129 +7,166 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-enum Role {
+enum UserRole {
   USER
-  VENDOR
-  SUBSCRIBER
   ADMIN
-  CEO
+  MERCHANT
 }
 
 enum OrderStatus {
   PENDING
   PROCESSING
-  SHIPPED
-  DELIVERED
-  CANCELLED
   PAID
+  FAILED
+  CANCELLED
+  REFUNDED
+  COMPLETED
+}
+
+enum PaymentProvider {
+  MTN
+  PAYSTACK
+  STRIPE
+  AIRTEL
+  ORANGE
 }
 
 model User {
-  id               String    @id @default(cuid())
-  firebaseUid      String    @unique
-  email            String    @unique
-  name             String?
-  role             Role      @default(USER)
-  subscriptionTier String    @default("NONE")
-  createdAt        DateTime  @default(now())
-  updatedAt        DateTime  @updatedAt
-  
-  // Relations
-  orders           Order[]
-  vendorProfile    Vendor?
-  agents           Agent[]
-  subscriptions    Subscription[]
-}
+  id            String   @id @default(uuid())
+  email         String   @unique
+  password      String
+  name          String?
+  phone         String?  @unique
+  role          UserRole @default(USER)
 
-model Vendor {
-  id             String    @id @default(cuid())
-  userId         String    @unique
-  user           User      @relation(fields: [userId], references: [id])
-  name           String
-  description    String?
-  commissionRate Float     @default(0.10)
-  createdAt      DateTime  @default(now())
-  updatedAt      DateTime  @updatedAt
-  
-  // Relations
-  products       Product[]
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  products      Product[]
+  orders        Order[]
+  wallet        Wallet?
+  agents        Agent[]
+  subscriptions Subscription[]
+  customers     Customer[]
+  leads         Lead[]
+  business      Business?
 }
 
 model Product {
-  id           String    @id @default(cuid())
-  title        String
-  description  String
-  price        Float
-  images       String[]
-  category     String
-  stock        Int       @default(0)
-  rating       Float     @default(0)
-  affiliateUrl String?
-  vendorId     String
-  vendor       Vendor    @relation(fields: [vendorId], references: [id])
-  createdAt    DateTime  @default(now())
-  updatedAt    DateTime  @updatedAt
+  id          String   @id @default(uuid())
+  title       String
+  description String
+  price       Float
+  image       String?
+  active      Boolean  @default(true)
 
-  // Relations
-  orderItems   OrderItem[]
+  sellerId    String
+  seller      User     @relation(fields: [sellerId], references: [id])
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  orders      Order[]
 }
 
 model Order {
-  id          String      @id @default(cuid())
+  id          String       @id @default(uuid())
+
   userId      String
-  user        User        @relation(fields: [userId], references: [id])
+  user        User         @relation(fields: [userId], references: [id])
+
+  productId   String
+  product     Product      @relation(fields: [productId], references: [id])
+
   total       Float
-  status      OrderStatus @default(PENDING)
-  paymentId   String?     // Stripe/Paystack reference
-  createdAt   DateTime    @default(now())
-  updatedAt   DateTime    @updatedAt
-  
-  // Relations
-  items       OrderItem[]
+  status      OrderStatus  @default(PENDING)
+
+  payment     Payment?
+
+  createdAt   DateTime     @default(now())
 }
 
-model OrderItem {
-  id        String  @id @default(cuid())
-  orderId   String
-  order     Order   @relation(fields: [orderId], references: [id])
-  productId String
-  product   Product @relation(fields: [productId], references: [id])
-  quantity  Int
-  price     Float   // Price at time of purchase
+model Payment {
+  id            String          @id @default(uuid())
+  orderId       String          @unique
+  order         Order           @relation(fields: [orderId], references: [id])
+
+  provider      PaymentProvider
+  reference     String
+  amount        Float
+
+  createdAt     DateTime        @default(now())
+}
+
+model Wallet {
+  id        String   @id @default(uuid())
+
+  userId    String   @unique
+  user      User     @relation(fields: [userId], references: [id])
+
+  balance   Float    @default(0)
+
+  createdAt DateTime @default(now())
 }
 
 model Agent {
-  id        String   @id @default(cuid())
+  id        String   @id @default(uuid())
+
   userId    String
   user      User     @relation(fields: [userId], references: [id])
-  type      String   // e.g., 'SCRAPER', 'TRADER', 'ANALYST'
-  state     String   @default("IDLE") // e.g., 'IDLE', 'RUNNING', 'ERROR'
-  config    Json?    // Configuration for the agent
+
+  name      String
+  type      String
+  active    Boolean  @default(true)
+
   createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
 }
 
 model Subscription {
-  id        String   @id @default(cuid())
+  id        String   @id @default(uuid())
+
   userId    String
   user      User     @relation(fields: [userId], references: [id])
-  plan      String   // e.g., 'FREE', 'PRO', 'ENTERPRISE'
-  status    String   @default("ACTIVE")
-  expiresAt DateTime?
+
+  plan      String
+  active    Boolean  @default(true)
+
   createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+}
+
+model Customer {
+  id          String    @id @default(uuid())
+  userId      String    // The merchant/user this customer belongs to
+  user        User      @relation(fields: [userId], references: [id])
+  name        String
+  email       String?
+  phone       String?
+  totalSpent  Float     @default(0)
+  createdAt   DateTime  @default(now())
 }
 
 model Lead {
-  id        String   @id @default(cuid())
+  id        String   @id @default(uuid())
   userId    String
   user      User     @relation(fields: [userId], references: [id])
   name      String
   email     String?
-  contact   String?
+  status    String   @default("NEW")
   value     Float?
-  status    String   @default("NEW") // e.g., 'NEW', 'CONTACTED', 'CLOSED'
-  origin    String?
   createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+}
+
+model Business {
+  id             String    @id @default(uuid())
+  userId         String    @unique
+  user           User      @relation(fields: [userId], references: [id])
+  name           String
+  description    String?
+  industry       String?
+  logo           String?
+  momoNumber     String?
+  momoNetwork    String?
+  balance        Float     @default(0)
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
 }

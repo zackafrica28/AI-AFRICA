@@ -3,18 +3,19 @@ import { NextResponse } from "next/server";
 
 export async function GET() {
     try {
-        const users = await prisma.user.findMany({
+        const products = await prisma.product.findMany({
+            where: { active: true },
             include: {
-                _count: {
+                seller: {
                     select: {
-                        products: true,
-                        orders: true
+                        name: true,
+                        email: true
                     }
                 }
             }
         });
 
-        return NextResponse.json(users);
+        return NextResponse.json(products);
     } catch (error: any) {
         return NextResponse.json({ error: error.message }, { status: 500 });
     }

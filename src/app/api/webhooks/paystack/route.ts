@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
-import prisma from "@/lib/prisma";
+import { prisma } from "@/lib/prisma";
 import crypto from "crypto";
+import { OrderStatus } from "@prisma/client";
 
 export async function POST(request: Request) {
     const body = await request.text();
@@ -28,21 +29,15 @@ export async function POST(request: Request) {
                 await tx.order.create({
                     data: {
                         userId: user.id,
+                        productId: productId,
                         total: amountTotal,
-                        status: "PAID",
-                        items: {
-                            create: {
-                                productId: productId,
-                                quantity: 1,
-                                price: amountTotal,
-                            }
-                        }
+                        status: OrderStatus.PAID,
                     }
                 });
 
                 await tx.product.update({
                     where: { id: productId },
-                    data: { stock: { decrement: 1 } }
+                    data: { active: { set: true } } // Decided to just keep it active or add a stock field if needed, but the current schema has 'active'
                 });
             });
         } catch (error) {

@@ -3,25 +3,20 @@
 import React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { motion } from "framer-motion";
 import styles from "./Sidebar.module.css";
 import {
     LayoutDashboard,
     ShoppingBag,
-    Tag,
     Cpu,
-    Tv,
     Settings,
     LogOut,
     ChevronLeft,
     ChevronRight,
     TrendingUp,
     Briefcase,
-    Users,
-    Activity
+    Users
 } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
-import ThemeSwitcher from "../ui/ThemeSwitcher";
 
 type MenuItem = {
     icon: React.ElementType;
@@ -35,63 +30,55 @@ const menuItems: MenuItem[] = [
     {
         icon: LayoutDashboard,
         label: "Command Center",
-        href: "/command-center"
-    },
-    {
-        icon: Activity,
-        label: "Dashboard",
         href: "/dashboard"
     },
     {
-        icon: Cpu,
-        label: "AI OS",
-        href: "/ai-os",
+        icon: Briefcase,
+        label: "Business Hub",
+        href: "/business",
         subItems: [
-            { label: "Overview", href: "/ai-os/overview" },
-            { label: "Automations", href: "/ai-os/automations" },
-            { label: "Analytics", href: "/ai-os/analytics" },
-        ]
-    },
-    {
-        icon: Users,
-        label: "CRM",
-        href: "/crm",
-        subItems: [
-            { label: "Leads", href: "/crm/leads" },
-            { label: "Pipeline", href: "/crm/pipeline" },
-            { label: "Customers", href: "/crm/customers" },
+            { label: "My Stores", href: "/sell/listings" },
+            { label: "Revenue Tracking", href: "/sell/revenue" },
+            { label: "Inventory", href: "/sell/inventory" },
         ]
     },
     {
         icon: ShoppingBag,
-        label: "Buy",
+        label: "Sourcing Hub",
         href: "/buy",
         subItems: [
             { label: "Marketplace", href: "/buy/marketplace" },
-            { label: "Orders", href: "/buy/orders" },
+            { label: "Global Orders", href: "/buy/orders" },
         ]
     },
     {
-        icon: Tag,
-        label: "Sell",
-        href: "/sell",
+        icon: Cpu,
+        label: "AI Workforce",
+        href: "/ai-os",
         subItems: [
-            { label: "Listings", href: "/sell/listings" },
-            { label: "Revenue", href: "/sell/revenue" },
+            { label: "Active Agents", href: "/ai-os/overview" },
+            { label: "Automations", href: "/ai-os/automations" },
         ]
     },
-    { icon: Tv, label: "Media Center", href: "/media" },
-    { icon: TrendingUp, label: "Investments", href: "/investments" },
-    { icon: Briefcase, label: "CEO Office", href: "/ceo", adminOnly: true },
     {
-        icon: Settings,
-        label: "Settings",
-        href: "/settings",
+        icon: TrendingUp,
+        label: "Financial Center",
+        href: "/finance",
         subItems: [
-            { label: "Profile", href: "/settings/profile" },
-            { label: "Billing", href: "/settings/billing" },
+            { label: "MoMo Wallet", href: "/finance/wallet" },
+            { label: "Payments", href: "/finance/payments" },
         ]
     },
+    {
+        icon: Users,
+        label: "Customer Base",
+        href: "/crm",
+        subItems: [
+            { label: "Retail Leads", href: "/crm/leads" },
+            { label: "Client CRM", href: "/crm/customers" },
+        ]
+    },
+    { icon: Settings, label: "System Config", href: "/settings" },
 ];
 
 interface SidebarProps {
@@ -104,10 +91,8 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, setIsOpen }) => {
     const { logout, isAdmin } = useAuth();
 
     return (
-        <motion.aside
+        <aside
             className={`${styles.sidebar} ${isOpen ? styles.open : styles.collapsed}`}
-            animate={{ width: isOpen ? 260 : 80 }}
-            transition={{ duration: 0.3, type: "spring", stiffness: 100 }}
         >
             <div className={styles.logoContainer}>
                 <div className={styles.logo}>
@@ -115,7 +100,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, setIsOpen }) => {
                     {isOpen && <span className={styles.logoBrand}>AFRICA</span>}
                 </div>
                 <button className={styles.toggle} onClick={() => setIsOpen(!isOpen)}>
-                    {isOpen ? <ChevronLeft size={20} /> : <ChevronRight size={20} />}
+                    {isOpen ? <ChevronLeft size={18} /> : <ChevronRight size={18} />}
                 </button>
             </div>
 
@@ -131,19 +116,14 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, setIsOpen }) => {
                                 className={`${styles.navItem} ${isActive ? styles.active : ""}`}
                             >
                                 <div className={styles.navItemContent}>
-                                    <item.icon className={styles.icon} size={22} />
+                                    <item.icon className={styles.icon} size={20} />
                                     {isOpen && <span className={styles.navLabel}>{item.label}</span>}
                                 </div>
-                                {isActive && <motion.div layoutId="activeNav" className={styles.activeIndicator} />}
                             </Link>
 
                             {/* Submenu - Only show if sidebar is open and item is active/expanded */}
                             {item.subItems && isOpen && isActive && (
-                                <motion.div
-                                    initial={{ opacity: 0, height: 0 }}
-                                    animate={{ opacity: 1, height: "auto" }}
-                                    className={styles.subMenu}
-                                >
+                                <div className={styles.subMenu}>
                                     {item.subItems.map((sub) => (
                                         <Link
                                             key={sub.href}
@@ -153,7 +133,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, setIsOpen }) => {
                                             {sub.label}
                                         </Link>
                                     ))}
-                                </motion.div>
+                                </div>
                             )}
                         </div>
                     );
@@ -161,15 +141,12 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, setIsOpen }) => {
             </nav>
 
             <div className={styles.footer}>
-                <div className="mb-4 flex justify-center w-full">
-                    {isOpen && <ThemeSwitcher />}
-                </div>
                 <button onClick={logout} className={styles.logoutBtn}>
-                    <LogOut size={22} />
-                    {isOpen && <span className={styles.navLabel}>Disconnect</span>}
+                    <LogOut size={20} />
+                    {isOpen && <span className={styles.navLabel}>Secure Exit</span>}
                 </button>
             </div>
-        </motion.aside>
+        </aside>
     );
 };
 

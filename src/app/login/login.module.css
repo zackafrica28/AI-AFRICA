@@ -4,63 +4,53 @@
     align-items: center;
     justify-content: center;
     padding: 20px;
+    background: var(--bg-secondary);
     position: relative;
     overflow: hidden;
 }
 
 .orb {
     position: absolute;
-    width: 600px;
-    height: 600px;
+    width: 800px;
+    height: 800px;
     background: radial-gradient(circle, var(--accent-muted) 0%, transparent 70%);
-    filter: blur(80px);
+    filter: blur(100px);
     z-index: -1;
-    animation: float 10s infinite alternate ease-in-out;
-}
-
-@keyframes float {
-    from {
-        transform: translate(-20%, -20%);
-    }
-
-    to {
-        transform: translate(20%, 20%);
-    }
+    top: -200px;
+    right: -200px;
 }
 
 .loginCard {
     width: 100%;
     max-width: 440px;
-    background: rgba(255, 255, 255, 0.03);
-    backdrop-filter: blur(20px);
+    background: var(--bg-primary);
     border: 1px solid var(--border);
-    border-radius: 24px;
-    padding: 48px;
-    box-shadow: 0 24px 64px rgba(0, 0, 0, 0.5);
+    border-radius: 20px;
+    padding: 40px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.05);
 }
 
 .header {
     text-align: center;
-    margin-bottom: 40px;
+    margin-bottom: 32px;
 }
 
 .logoWrapper {
-    width: 80px;
-    height: 80px;
-    margin: 0 auto 24px;
+    width: 70px;
+    height: 70px;
+    margin: 0 auto 20px;
     background: var(--bg-tertiary);
-    border: 1px solid var(--border);
-    border-radius: 20px;
+    border-radius: 16px;
     display: flex;
     align-items: center;
     justify-content: center;
     color: var(--accent);
-    box-shadow: 0 0 20px var(--accent-muted);
 }
 
 .header h1 {
-    font-size: 1.75rem;
+    font-size: 1.5rem;
     margin-bottom: 8px;
+    color: var(--text-primary);
 }
 
 .header p {
@@ -74,66 +64,23 @@
     gap: 24px;
 }
 
-.inputGroup {
-    position: relative;
-}
-
-.inputGroup label {
-    position: absolute;
-    left: 16px;
-    top: 14px;
-    font-size: 0.9rem;
-    color: var(--text-muted);
-    pointer-events: none;
-    transition: all 0.2s ease;
-}
-
-.inputGroup label.floating {
-    top: -24px;
-    left: 4px;
-    font-size: 0.75rem;
-    color: var(--accent);
-    text-transform: uppercase;
-    letter-spacing: 1px;
-}
-
-.input {
-    width: 100%;
-    background: var(--bg-tertiary);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 14px 16px;
-    color: var(--text-primary);
-    transition: var(--transition);
-}
-
-.input:focus {
-    outline: none;
-    border-color: var(--accent);
-    background: rgba(255, 255, 255, 0.05);
-    box-shadow: 0 0 15px var(--accent-muted);
-}
-
 .submitBtn {
     width: 100%;
-    padding: 16px !important;
+    height: 50px;
+    font-size: 1rem !important;
 }
 
 .footer {
-    margin-top: 40px;
+    margin-top: 32px;
     text-align: center;
-}
-
-.footer span {
-    font-size: 0.65rem;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    color: var(--text-muted);
+    border-top: 1px solid var(--border);
+    padding-top: 24px;
 }
 
 .securityBar {
-    height: 2px;
-    background: linear-gradient(90deg, transparent, var(--accent), transparent);
-    margin-top: 12px;
-    opacity: 0.3;
+    height: 3px;
+    background: var(--accent);
+    width: 40px;
+    margin: 12px auto;
+    border-radius: 2px;
 }

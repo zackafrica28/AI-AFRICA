@@ -1,31 +1,32 @@
 "use server";
 
-import prisma from "@/lib/prisma";
+import { prisma } from "@/lib/prisma";
 
 /**
- * Fetches vendor profile for a specific user.
+ * Fetches vendor/business profile for a specific user.
  */
 export async function getVendorProfile(userId: string) {
-    return await prisma.vendor.findUnique({
+    return await prisma.business.findUnique({
         where: { userId },
     });
 }
 
 /**
- * Fetches analytics for a vendor (total revenue, order count).
+ * Fetches analytics for a business (total revenue, order count).
  */
-export async function getVendorAnalytics(vendorId: string) {
-    const orders = await prisma.orderItem.findMany({
+export async function getVendorAnalytics(userId: string) {
+    const orders = await prisma.order.findMany({
         where: {
-            product: { vendorId }
+            product: { sellerId: userId }
         },
         include: {
-            order: true
+            product: true,
+            user: true
         }
     });
 
-    const totalRevenue = orders.reduce((sum: number, item: any) => sum + item.price * item.quantity, 0);
-    const totalOrders = new Set(orders.map((o: any) => o.orderId)).size;
+    const totalRevenue = orders.reduce((sum: number, order: any) => sum + order.total, 0);
+    const totalOrders = orders.length;
 
     return {
         totalRevenue,
@@ -35,10 +36,10 @@ export async function getVendorAnalytics(vendorId: string) {
 }
 
 /**
- * Creates a new vendor profile for a user.
+ * Creates a new business profile for a user.
  */
 export async function createVendor(userId: string, name: string, description: string) {
-    return await prisma.vendor.create({
+    return await prisma.business.create({
         data: {
             userId,
             name,
@@ -48,11 +49,11 @@ export async function createVendor(userId: string, name: string, description: st
 }
 
 /**
- * Updates vendor status or profile.
+ * Updates business status or profile.
  */
-export async function updateVendorProfile(vendorId: string, data: any) {
-    return await prisma.vendor.update({
-        where: { id: vendorId },
+export async function updateVendorProfile(userId: string, data: any) {
+    return await prisma.business.update({
+        where: { userId },
         data
     });
 }

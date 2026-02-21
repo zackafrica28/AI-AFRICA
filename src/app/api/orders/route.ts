@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
-import prisma from "@/lib/prisma";
+import { prisma } from "@/lib/prisma";
+import { OrderStatus } from "@prisma/client";
 
 export async function GET(request: Request) {
     try {
@@ -9,11 +10,7 @@ export async function GET(request: Request) {
         const orders = await prisma.order.findMany({
             where: userId ? { userId } : {},
             include: {
-                items: {
-                    include: {
-                        product: true,
-                    },
-                },
+                product: true,
             },
             orderBy: { createdAt: "desc" },
         });
@@ -26,21 +23,14 @@ export async function GET(request: Request) {
 
 export async function POST(request: Request) {
     try {
-        const { userId, items, total, paymentId } = await request.json();
+        const { userId, productId, total, status } = await request.json();
 
         const order = await prisma.order.create({
             data: {
                 userId,
+                productId,
                 total,
-                paymentId,
-                status: "PAID",
-                items: {
-                    create: items.map((item: any) => ({
-                        productId: item.productId,
-                        quantity: item.quantity,
-                        price: item.price,
-                    })),
-                },
+                status: (status as OrderStatus) || OrderStatus.PAID,
             },
         });
 

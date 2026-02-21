@@ -7,11 +7,7 @@ import {
     TrendingUp,
     Users,
     ShoppingBag,
-    Activity,
-    Zap,
     Cpu,
-    Bell,
-    ArrowRight,
     Plus
 } from "lucide-react";
 import styles from "./dashboard.module.css";
@@ -24,132 +20,140 @@ import { getUserAnalytics } from "@/server/actions/user";
 export default function DashboardPage() {
     const { profile, user } = useAuth();
     const [stats, setStats] = useState<any>(null);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         if (user?.uid) {
-            getUserAnalytics(user.uid).then(setStats);
+            setLoading(true);
+            getUserAnalytics(user.uid).then((data) => {
+                setStats(data);
+                setLoading(false);
+            });
         }
     }, [user?.uid]);
 
+    if (loading) {
+        return <DashboardLayout><div className="flex items-center justify-center min-h-[60vh]"><div className="neon-spinner"></div></div></DashboardLayout>;
+    }
+
     return (
         <DashboardLayout>
-            <div className={styles.grid}>
+            <div className={styles.container}>
                 {/* Header Section */}
-                <section className={styles.welcome}>
-                    <div className={styles.welcomeText}>
-                        <h1 className="neon-text">Command Center</h1>
-                        <p>Node Status: <span className={styles.online}>Online</span> • Role: <strong>{profile?.role || "GUEST"}</strong></p>
+                <header className={styles.header}>
+                    <div className={styles.welcome}>
+                        <h1 className={styles.title}>System Overview</h1>
+                        <p className={styles.subtitle}>Welcome back, {profile?.name || "Entrepreneur"}. Your business nodes are active.</p>
                     </div>
-                    <div className={styles.quickActions}>
-                        <button className={styles.actionCircle} title="New Automation"><Plus size={18} /></button>
-                        <button className={styles.actionCircle} title="Notifications"><Bell size={18} /><span className={styles.dot} /></button>
+                    <div className={styles.actions}>
+                        <Link href="/sell/listings" className={styles.primaryBtn}>
+                            <Plus size={18} />
+                            <span>Add Product</span>
+                        </Link>
                     </div>
-                </section>
+                </header>
 
-                {/* Global Financial Metrics */}
-                <section className={styles.stats}>
+                {/* Core Metrics */}
+                <section className={styles.statsGrid}>
                     <StatCard
-                        label="Total Investment"
-                        value={stats ? `$${stats.totalSpent.toLocaleString()}` : "$0"}
-                        trend={{ value: 12, isUp: true }}
+                        label="Total Revenue"
+                        value={stats ? `$${stats.totalSpent.toLocaleString()}` : "$0.00"}
+                        trend={{ value: 12.5, isUp: true }}
                         icon={TrendingUp}
+                        color="#ff6600"
                     />
                     <StatCard
-                        label="Purchase Traffic"
-                        value={stats?.orderCount || "0"}
-                        trend={{ value: 8, isUp: true }}
+                        label="Active Customers"
+                        value={stats?.customerCount || "128"}
+                        trend={{ value: 4.2, isUp: true }}
                         icon={Users}
-                        color="#7000ff"
+                        color="#ff8c00"
                     />
                     <StatCard
-                        label="Active Agents"
+                        label="AI Agents Active"
                         value={stats?.activeAgents || "0"}
-                        trend={{ value: 3, isUp: false }}
-                        icon={ShoppingBag}
-                        color="#10b981"
+                        icon={Cpu}
+                        color="#111827"
                     />
                     <StatCard
-                        label="AI Efficiency"
-                        value="98.2%"
-                        icon={Zap}
-                        color="#f97316"
+                        label="Market Reach"
+                        value="14 Nodes"
+                        icon={ShoppingBag}
+                        color="#ff6600"
                     />
                 </section>
 
-                {/* Main Operational Hub */}
-                <div className={styles.contentGrid}>
-                    <div className={styles.mainColumn}>
-                        {/* Active Modules Grid */}
-                        <HolographicCard title="Active Operational Modules" subtitle="One-touch access to system sectors">
-                            <div className={styles.modulesGrid}>
+                {/* Operational Content */}
+                <div className={styles.mainGrid}>
+                    <div className={styles.leftCol}>
+                        <HolographicCard title="Real-Time Revenue" subtitle="Regional sales performance across Africa">
+                            <div className={styles.chartPlaceholder}>
+                                {[60, 45, 80, 55, 90, 70, 100].map((h, i) => (
+                                    <div key={i} className={styles.barWrapper}>
+                                        <div className={styles.bar} style={{ height: `${h}%` }} />
+                                    </div>
+                                ))}
+                            </div>
+                            <div className={styles.chartLabels}>
+                                <span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span>
+                            </div>
+                        </HolographicCard>
+
+                        <HolographicCard title="AI Agent Intelligence" variant="glass">
+                            <div className={styles.agentList}>
+                                <div className={styles.agentItem}>
+                                    <div className={styles.agentInfo}>
+                                        <div className={styles.agentStatus} />
+                                        <span>Sales Optimizer Agent</span>
+                                    </div>
+                                    <span className={styles.agentTask}>Analyzing MoMo trends...</span>
+                                </div>
+                                <div className={styles.agentItem}>
+                                    <div className={styles.agentInfo}>
+                                        <div className={styles.agentStatus} />
+                                        <span>Inventory Scraper</span>
+                                    </div>
+                                    <span className={styles.agentTask}>Restocking Solar Nodes</span>
+                                </div>
+                            </div>
+                        </HolographicCard>
+                    </div>
+
+                    <div className={styles.rightCol}>
+                        <HolographicCard title="Recent Transactions" subtitle="MoMo & Card Payments">
+                            <div className={styles.transactionList}>
                                 {[
-                                    { name: "AI OS", icon: Cpu, href: "/ai-os/overview", color: "var(--accent)" },
-                                    { name: "CRM", icon: Users, href: "/crm/leads", color: "#7000ff" },
-                                    { name: "Marketplace", icon: ShoppingBag, href: "/buy/marketplace", color: "#10b981" },
-                                    { name: "Logistics", icon: Activity, href: "/sell/listings", color: "#f97316" },
-                                ].map((mod) => (
-                                    <Link href={mod.href} key={mod.name} className={styles.moduleLink}>
-                                        <mod.icon size={24} style={{ color: mod.color }} />
-                                        <span>{mod.name}</span>
-                                        <ArrowRight size={14} className={styles.arrow} />
-                                    </Link>
+                                    { name: "John D.", method: "MTN MoMo", amount: "+$45.00", time: "2m ago" },
+                                    { name: "Sarah K.", method: "Airtel Money", amount: "+$120.00", time: "15m ago" },
+                                    { name: "Tech Corp", method: "Visa / Paystack", amount: "+$1,200.00", time: "1h ago" },
+                                ].map((tx, i) => (
+                                    <div key={i} className={styles.txItem}>
+                                        <div className={styles.txInfo}>
+                                            <p className={tx.amount.startsWith('+') ? styles.txNamePositive : styles.txName}>{tx.name}</p>
+                                            <span>{tx.method}</span>
+                                        </div>
+                                        <div className={styles.txAmount}>
+                                            <p>{tx.amount}</p>
+                                            <span>{tx.time}</span>
+                                        </div>
+                                    </div>
                                 ))}
                             </div>
                         </HolographicCard>
 
-                        <HolographicCard title="AI Strategic Recommendations" variant="neon">
-                            <div className={styles.recommendations}>
-                                <div className={styles.recItem}>
-                                    <div className={styles.recIcon}><TrendingUp size={18} /></div>
-                                    <div className={styles.recText}>
-                                        <p>Market Trend Alert: Solar components in West Africa are surging.</p>
-                                        <Link href="/buy/marketplace">Scale Inventory</Link>
-                                    </div>
+                        <HolographicCard title="System Health" variant="solid">
+                            <div className={styles.healthStatus}>
+                                <div className={styles.healthRow}>
+                                    <span>Network Latency</span>
+                                    <strong>12ms</strong>
                                 </div>
-                                <div className={styles.recItem}>
-                                    <div className={styles.recIcon}><Cpu size={18} /></div>
-                                    <div className={styles.recText}>
-                                        <p>Optimization: Web Scraper Node-4 is idle. Re-allocate to Sentiment Analysis?</p>
-                                        <Link href="/ai-os/automations">Approve Re-allocation</Link>
-                                    </div>
+                                <div className={styles.healthRow}>
+                                    <span>Database Nodes</span>
+                                    <strong>Active (5/5)</strong>
                                 </div>
                             </div>
                         </HolographicCard>
                     </div>
-
-                    <aside className={styles.sideColumn}>
-                        <HolographicCard title="System Health" variant="glass">
-                            <div className={styles.healthStats}>
-                                <div className={styles.healthItem}>
-                                    <span>CPU Load</span>
-                                    <div className={styles.progressBar}><div className={styles.progress} style={{ width: '32%' }} /></div>
-                                </div>
-                                <div className={styles.healthItem}>
-                                    <span>Storage Node-A</span>
-                                    <div className={styles.progressBar}><div className={styles.progress} style={{ width: '68%' }} /></div>
-                                </div>
-                                <div className={styles.healthItem}>
-                                    <span>Neural Latency</span>
-                                    <div className={styles.progressBar}><div className={styles.progress} style={{ width: '12%', background: '#10b981' }} /></div>
-                                </div>
-                            </div>
-                        </HolographicCard>
-
-                        <HolographicCard title="Neural Notifications" interactive={false}>
-                            <div className={styles.notifications}>
-                                <div className={styles.notif}>
-                                    <div className={styles.notifDot} />
-                                    <p>Subscription payout secured via Stripe.</p>
-                                    <span>2 mins ago</span>
-                                </div>
-                                <div className={styles.notif}>
-                                    <div className={styles.notifDot} style={{ background: '#f97316' }} />
-                                    <p>System update v4.2 stable deployment ready.</p>
-                                    <span>1 hour ago</span>
-                                </div>
-                            </div>
-                        </HolographicCard>
-                    </aside>
                 </div>
             </div>
         </DashboardLayout>
