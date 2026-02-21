@@ -1,5 +1,5 @@
 "use client";
-
+import React from "react";
 import { useTheme, Theme } from "@/context/ThemeContext";
 import { Moon, Droplets, Sunset } from "lucide-react";
 import styles from "./ThemeSwitcher.module.css";

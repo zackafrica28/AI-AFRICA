@@ -11,7 +11,7 @@ interface HeaderProps {
 }
 
 const Header: React.FC<HeaderProps> = ({ toggleSidebar }) => {
-    const { user } = useAuth();
+    const { user, profile } = useAuth();
 
     return (
         <header className={styles.header}>
@@ -33,8 +33,8 @@ const Header: React.FC<HeaderProps> = ({ toggleSidebar }) => {
 
                 <motion.div whileHover={{ scale: 1.05 }} className={styles.userProfile}>
                     <div className={styles.userInfo}>
-                        <span className={styles.userName}>{user?.email.split('@')[0] || "Guest"}</span>
-                        <span className={styles.userRole}>{user?.role || "GUEST"}</span>
+                        <span className={styles.userName}>{user?.email?.split('@')[0] || "Guest"}</span>
+                        <span className={styles.userRole}>{profile?.role || "GUEST"}</span>
                     </div>
                     <div className={styles.avatar}>
                         <User size={20} />

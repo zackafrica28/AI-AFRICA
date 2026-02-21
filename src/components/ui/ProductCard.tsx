@@ -4,16 +4,26 @@ import HolographicCard from "./HolographicCard";
 import Button from "./Button";
 import styles from "./ProductCard.module.css";
 
-interface ProductCardProps {
+interface Product {
     id: string;
     title: string;
     price: number;
-    image: string;
     category: string;
-    vendorName: string;
+    images: string[];
+    vendor?: {
+        name: string;
+    }
 }
 
-export default function ProductCard({ id, title, price, image, category, vendorName }: ProductCardProps) {
+interface ProductCardProps {
+    product: Product;
+}
+
+export default function ProductCard({ product }: ProductCardProps) {
+    const { id, title, price, images, category, vendor } = product;
+    const image = images[0] || "https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&q=80&w=800";
+    const vendorName = vendor?.name || "AI-AFRICA Node";
+
     return (
         <HolographicCard className={styles.card} variant="glass">
             <div className={styles.imageContainer}>

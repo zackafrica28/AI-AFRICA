@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation";
 
 const FluxNavbar = () => {
     const [isOpen, setIsOpen] = useState(false);
-    const { user, logout, isAdmin } = useAuth();
+    const { user, profile, logout, isAdmin } = useAuth();
     const router = useRouter();
 
     return (
@@ -25,7 +25,7 @@ const FluxNavbar = () => {
                         <Link href="/dashboard" className={styles.link}>Dashboard</Link>
                         <Link href="/buy" className={styles.link}>Buy</Link>
 
-                        {(user.subscriptionTier || isAdmin) ? (
+                        {(profile?.subscriptionTier !== "NONE" || isAdmin) ? (
                             <Link href="/sell" className={styles.link}>Sell</Link>
                         ) : (
                             <Link href="/subscribe" className={styles.link}>Unlock Sell</Link>

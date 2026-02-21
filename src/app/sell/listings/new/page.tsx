@@ -53,7 +53,7 @@ export default function NewListing() {
         <ModulePage title="Deploy New Asset" subtitle="Publish your digital or physical inventory to the AI-AFRICA network.">
             <div className={styles.container}>
                 <form onSubmit={handleSubmit}>
-                    <HolographicCard title="Asset Properties" variant=" neon">
+                    <HolographicCard title="Asset Properties" variant="neon">
                         <div className={styles.field}>
                             <label>Product Title</label>
                             <input

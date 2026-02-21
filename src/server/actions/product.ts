@@ -1,3 +1,7 @@
+"use server";
+
+import prisma from "@/lib/prisma";
+
 /**
  * Fetches all products with optional filters.
  */
@@ -7,6 +11,18 @@ export async function getProducts(limit: number = 12, offset: number = 0, catego
         take: limit,
         skip: offset,
         orderBy: { createdAt: "desc" },
+    });
+}
+
+/**
+ * Fetches a single product by its ID.
+ */
+export async function getProductById(id: string) {
+    return await prisma.product.findUnique({
+        where: { id },
+        include: {
+            vendor: true
+        }
     });
 }
 
