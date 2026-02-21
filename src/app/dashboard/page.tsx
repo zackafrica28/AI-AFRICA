@@ -16,11 +16,20 @@ import {
 } from "lucide-react";
 import styles from "./dashboard.module.css";
 
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useAuth } from "@/context/AuthContext";
+import { getUserAnalytics } from "@/server/actions/user";
 
 export default function DashboardPage() {
-    const { profile } = useAuth();
+    const { profile, user } = useAuth();
+    const [stats, setStats] = useState<any>(null);
+
+    useEffect(() => {
+        if (user?.uid) {
+            getUserAnalytics(user.uid).then(setStats);
+        }
+    }, [user?.uid]);
 
     return (
         <DashboardLayout>
@@ -39,10 +48,32 @@ export default function DashboardPage() {
 
                 {/* Global Financial Metrics */}
                 <section className={styles.stats}>
-                    <StatCard label="Total Revenue" value="$450,290" trend={{ value: 12, isUp: true }} icon={TrendingUp} />
-                    <StatCard label="Active Clients" value="8,421" trend={{ value: 8, isUp: true }} icon={Users} color="#7000ff" />
-                    <StatCard label="Daily Orders" value="142" trend={{ value: 3, isUp: false }} icon={ShoppingBag} color="#10b981" />
-                    <StatCard label="AI Efficiency" value="94.2%" icon={Zap} color="#f97316" />
+                    <StatCard
+                        label="Total Investment"
+                        value={stats ? `$${stats.totalSpent.toLocaleString()}` : "$0"}
+                        trend={{ value: 12, isUp: true }}
+                        icon={TrendingUp}
+                    />
+                    <StatCard
+                        label="Purchase Traffic"
+                        value={stats?.orderCount || "0"}
+                        trend={{ value: 8, isUp: true }}
+                        icon={Users}
+                        color="#7000ff"
+                    />
+                    <StatCard
+                        label="Active Agents"
+                        value={stats?.activeAgents || "0"}
+                        trend={{ value: 3, isUp: false }}
+                        icon={ShoppingBag}
+                        color="#10b981"
+                    />
+                    <StatCard
+                        label="AI Efficiency"
+                        value="98.2%"
+                        icon={Zap}
+                        color="#f97316"
+                    />
                 </section>
 
                 {/* Main Operational Hub */}

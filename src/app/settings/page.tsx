@@ -1,26 +1,50 @@
 "use client";
-import { useState } from "react";
+
+import { useEffect, useState } from "react";
 import DashboardLayout from "@/components/layout/DashboardLayout";
 import HolographicCard from "@/components/ui/HolographicCard";
 import Button from "@/components/ui/Button";
 import ThemeSwitcher from "@/components/ui/ThemeSwitcher";
 import styles from "./settings.module.css";
-import { Shield, Eye, EyeOff, Save } from "lucide-react";
+import { Shield, Save } from "lucide-react";
+import { useAuth } from "@/context/AuthContext";
+import { updateUserProfile } from "@/server/actions/user";
 
 export default function SettingsPage() {
-    const [showPassword, setShowPassword] = useState(false);
+    const { profile } = useAuth();
     const [formData, setFormData] = useState({
-        youtubeEmail: "zackawudumk@gmail.com",
-        youtubePassword: "••••••••••••••",
-        youtubeChannelId: "UC_AI_AFRICA_NODE_01",
+        name: "",
+        email: "",
     });
+    const [saving, setSaving] = useState(false);
+
+    useEffect(() => {
+        if (profile) {
+            setFormData({
+                name: profile.name || "",
+                email: profile.email || "",
+            });
+        }
+    }, [profile]);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
-    const handleSave = () => {
-        alert("Credentials securely encrypted and saved to the Neural Vault.");
+    const handleSave = async () => {
+        if (!profile?.id) return;
+        setSaving(true);
+        try {
+            await updateUserProfile(profile.id, {
+                name: formData.name,
+            });
+            alert("Neural profile updated successfully.");
+        } catch (error) {
+            console.error("Update failed:", error);
+            alert("Profile synchronization failed.");
+        } finally {
+            setSaving(false);
+        }
     };
 
     return (
@@ -28,54 +52,37 @@ export default function SettingsPage() {
             <div className={styles.container}>
                 <header className={styles.header}>
                     <h1 className="neon-text">Command Vault</h1>
-                    <p>Manage sensitive credentials for AI Autonomous Agents.</p>
+                    <p>Manage your neural identity and global credentials.</p>
                 </header>
 
                 <div className={styles.content}>
                     <div className={styles.mainColumn}>
-                        <HolographicCard title="YouTube Automation Credentials" subtitle="Encrypted API Access">
+                        <HolographicCard title="Identity Profile" subtitle="Global Node Information">
                             <div className={styles.form}>
                                 <div className={styles.inputGroup}>
-                                    <label>Channel Email</label>
-                                    <div className={styles.inputWrapper}>
-                                        <input
-                                            type="email"
-                                            name="youtubeEmail"
-                                            value={formData.youtubeEmail}
-                                            onChange={handleChange}
-                                            className={styles.input}
-                                        />
-                                    </div>
-                                </div>
-
-                                <div className={styles.inputGroup}>
-                                    <label>Channel Access Key</label>
-                                    <div className={styles.inputWrapper}>
-                                        <input
-                                            type={showPassword ? "text" : "password"}
-                                            name="youtubePassword"
-                                            value={formData.youtubePassword}
-                                            onChange={handleChange}
-                                            className={styles.input}
-                                        />
-                                        <button
-                                            className={styles.toggleVisibility}
-                                            onClick={() => setShowPassword(!showPassword)}
-                                        >
-                                            {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
-                                        </button>
-                                    </div>
-                                </div>
-
-                                <div className={styles.inputGroup}>
-                                    <label>Service ID</label>
+                                    <label>Display Name</label>
                                     <div className={styles.inputWrapper}>
                                         <input
                                             type="text"
-                                            name="youtubeChannelId"
-                                            value={formData.youtubeChannelId}
+                                            name="name"
+                                            value={formData.name}
                                             onChange={handleChange}
                                             className={styles.input}
+                                            placeholder="e.g. Zack Awudu"
+                                        />
+                                    </div>
+                                </div>
+
+                                <div className={styles.inputGroup}>
+                                    <label>Network Email</label>
+                                    <div className={styles.inputWrapper}>
+                                        <input
+                                            type="email"
+                                            name="email"
+                                            value={formData.email}
+                                            readOnly
+                                            className={styles.input}
+                                            style={{ opacity: 0.6 }}
                                         />
                                     </div>
                                 </div>
@@ -84,8 +91,9 @@ export default function SettingsPage() {
                                     onClick={handleSave}
                                     className={styles.saveBtn}
                                     leftIcon={<Save size={20} />}
+                                    disabled={saving}
                                 >
-                                    Encrypt & Save to Vault
+                                    {saving ? "Synchronizing..." : "Update Neural Profile"}
                                 </Button>
                             </div>
                         </HolographicCard>
@@ -102,7 +110,7 @@ export default function SettingsPage() {
                                     <Shield size={24} className={styles.shieldIcon} />
                                     <div>
                                         <p className={styles.statusTitle}>AES-512 Enforced</p>
-                                        <p className={styles.statusDesc}>Your data is invisible to the cloud.</p>
+                                        <p className={styles.statusDesc}>Your identity is encrypted across the node.</p>
                                     </div>
                                 </div>
                             </div>

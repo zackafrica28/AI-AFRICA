@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { getProducts } from "@/server/actions/product";
+import { createProduct, getProducts } from "@/server/actions/product";
 
 export async function GET(request: Request) {
     try {
@@ -13,5 +13,22 @@ export async function GET(request: Request) {
     } catch (error) {
         console.error("API Error (Products):", error);
         return NextResponse.json({ error: "Failed to fetch products" }, { status: 500 });
+    }
+}
+
+export async function POST(request: Request) {
+    try {
+        const data = await request.json();
+        const { vendorId, ...productData } = data;
+
+        if (!vendorId) {
+            return NextResponse.json({ error: "Vendor ID is required" }, { status: 400 });
+        }
+
+        const product = await createProduct(vendorId, productData);
+        return NextResponse.json(product);
+    } catch (error: any) {
+        console.error("API Error (Create Product):", error);
+        return NextResponse.json({ error: error.message }, { status: 500 });
     }
 }

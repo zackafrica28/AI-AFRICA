@@ -7,13 +7,14 @@ import {
     signOut,
     User as FirebaseUser
 } from "firebase/auth";
-import { auth, db } from "@/lib/firebase";
-import { doc, getDoc, setDoc } from "firebase/firestore";
+import { auth } from "@/lib/firebase";
 import { syncUserWithDb } from "@/lib/auth-sync";
 
 interface UserProfile {
+    id: string; // Internal Postgres ID
     email: string;
-    role: "CEO" | "SUBSCRIBER" | "GUEST" | "VENDOR";
+    name?: string;
+    role: "CEO" | "SUBSCRIBER" | "GUEST" | "VENDOR" | "USER";
     subscriptionTier: "TITANIUM" | "GOLD" | "NONE";
     createdAt?: string;
     activeModules?: string[];
@@ -40,38 +41,23 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
             setUser(firebaseUser);
             if (firebaseUser) {
-                // Sync with Postgres DB
-                syncUserWithDb(firebaseUser.uid, firebaseUser.email || "", firebaseUser.displayName || undefined)
-                    .catch(err => console.error("Postgres Sync Error:", err));
-
-                // Fetch profile from Firestore
-                const docRef = doc(db, "users", firebaseUser.uid);
-
                 try {
-                    const docSnap = await getDoc(docRef);
+                    // Sync with Postgres DB and get the user record
+                    const dbUser = await syncUserWithDb(
+                        firebaseUser.uid,
+                        firebaseUser.email || "",
+                        firebaseUser.displayName || undefined
+                    );
 
-                    if (docSnap.exists()) {
-                        setProfile(docSnap.data() as UserProfile);
-                    } else {
-                        // Create default profile if missing
-                        const newProfile: UserProfile = {
-                            email: firebaseUser.email || "",
-                            role: firebaseUser.email?.includes("zackawudu") ? "CEO" : "GUEST",
-                            subscriptionTier: "NONE",
-                            createdAt: new Date().toISOString(),
-                            activeModules: ["ai-os"]
-                        };
-                        await setDoc(docRef, newProfile);
-                        setProfile(newProfile);
-                    }
-                } catch (err) {
-                    console.error("Error fetching user profile:", err);
-                    // Fallback to basic profile to allow login even if DB fails
                     setProfile({
-                        email: firebaseUser.email || "",
-                        role: "GUEST",
-                        subscriptionTier: "NONE"
+                        id: dbUser.id,
+                        email: dbUser.email,
+                        role: dbUser.role as any,
+                        subscriptionTier: dbUser.subscriptionTier as any,
+                        createdAt: dbUser.createdAt.toISOString(),
                     });
+                } catch (err) {
+                    console.error("Postgres Sync/Fetch Error:", err);
                 }
             } else {
                 setProfile(null);

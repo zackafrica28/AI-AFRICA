@@ -1,0 +1,80 @@
+.container {
+    padding: 20px 0;
+}
+
+.table {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.header {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1.5fr;
+    padding: 10px 20px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.row {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1.5fr;
+    align-items: center;
+    padding: 15px 20px;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.row:hover {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: var(--accent);
+}
+
+.userInfo {
+    display: flex;
+    flex-direction: column;
+}
+
+.userInfo strong {
+    color: var(--text);
+}
+
+.userInfo span {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+}
+
+.roleBadge {
+    display: inline-block;
+    padding: 4px 8px;
+    background: rgba(112, 0, 255, 0.2);
+    color: #a855f7;
+    border-radius: 4px;
+    font-size: 0.7rem;
+    font-weight: bold;
+    width: fit-content;
+}
+
+.status {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 0.8rem;
+    color: #10b981;
+}
+
+.actions {
+    display: flex;
+    gap: 10px;
+}
+
+.banBtn:hover {
+    color: #ef4444;
+    border-color: #ef4444;
+}

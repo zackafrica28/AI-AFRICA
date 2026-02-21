@@ -1,16 +1,28 @@
 "use client";
+import { useEffect, useState } from "react";
 import ModulePage from "@/components/ui/ModulePage";
 import HolographicCard from "@/components/ui/HolographicCard";
 import Button from "@/components/ui/Button";
 import { UserPlus, Mail } from "lucide-react";
 import styles from "./leads.module.css";
+import { useAuth } from "@/context/AuthContext";
+import { getLeads } from "@/server/actions/crm";
 
 export default function CRMLeads() {
-    const leads = [
-        { id: 1, name: "Alpha Construction", contact: "John Doe", value: "$45k", origin: "Lagos Hub" },
-        { id: 2, name: "Safari Tech", contact: "Jane Smith", value: "$82k", origin: "Nairobi Node" },
-        { id: 3, name: "Sahara Energy", contact: "Ali Ahmed", value: "$120k", origin: "Cairo Base" },
-    ];
+    const { user } = useAuth();
+    const [leads, setLeads] = useState<any[]>([]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        if (user?.uid) {
+            getLeads(user.uid).then(data => {
+                setLeads(data);
+                setLoading(false);
+            });
+        }
+    }, [user?.uid]);
+
+    if (loading) return <ModulePage title="Scanning Nodes..." subtitle="Fetching lead intelligence."><div className="neon-spinner"></div></ModulePage>;
 
     return (
         <ModulePage title="Leads Management" subtitle="Track and nurture potential business opportunities across Africa.">
