@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { stripe } from "@/lib/stripe";
-import prisma from "@/lib/prisma";
+import { prisma } from "@/lib/prisma";
 
 export async function POST(request: Request) {
   try {
@@ -25,7 +25,7 @@ export async function POST(request: Request) {
             product_data: {
               name: product.title,
               description: product.description,
-              images: product.images,
+              images: product.image ? [product.image] : [],
             },
             unit_amount: Math.round(product.price * 100), // Stripe uses cents
           },

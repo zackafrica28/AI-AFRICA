@@ -1,6 +1,6 @@
 "use server";
 
-import prisma from "@/lib/prisma";
+import { prisma } from "@/lib/prisma";
 
 /**
  * Synchronizes a Firebase user with the PostgreSQL database.
@@ -19,8 +19,9 @@ export async function syncUserWithDb(firebaseUid: string, email: string, name?: 
             create: {
                 firebaseUid,
                 email,
+                password: "", // Handled by Firebase, but schema might require it
                 name: name || undefined,
-                role: role as any, // Use any to bypass lint for now
+                role: role as any,
             },
         });
 

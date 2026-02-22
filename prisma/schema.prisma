@@ -11,12 +11,18 @@ enum UserRole {
   USER
   ADMIN
   MERCHANT
+  CEO
+  SUBSCRIBER
+  GUEST
+  VENDOR
 }
 
 enum OrderStatus {
   PENDING
+  PAYMENT_PENDING
   PROCESSING
   PAID
+  ESCROWED
   FAILED
   CANCELLED
   REFUNDED
@@ -31,8 +37,25 @@ enum PaymentProvider {
   ORANGE
 }
 
+enum WalletType {
+  USER
+  VENDOR
+  ESCROW
+  SYSTEM
+}
+
+enum TransactionType {
+  DEPOSIT
+  PAYMENT
+  ESCROW_HOLD
+  ESCROW_RELEASE
+  WITHDRAWAL
+  REFUND
+}
+
 model User {
   id            String   @id @default(uuid())
+  firebaseUid   String   @unique
   email         String   @unique
   password      String
   name          String?
@@ -70,20 +93,24 @@ model Product {
 }
 
 model Order {
-  id          String       @id @default(uuid())
+  id             String      @id @default(uuid())
 
-  userId      String
-  user        User         @relation(fields: [userId], references: [id])
+  userId         String
+  user           User        @relation(fields: [userId], references: [id])
 
-  productId   String
-  product     Product      @relation(fields: [productId], references: [id])
+  productId      String
+  product        Product     @relation(fields: [productId], references: [id])
 
-  total       Float
-  status      OrderStatus  @default(PENDING)
+  vendorId       String?
 
-  payment     Payment?
+  total          Float
+  status         OrderStatus @default(PENDING)
 
-  createdAt   DateTime     @default(now())
+  escrowWalletId String?
+
+  payment        Payment?
+
+  createdAt      DateTime    @default(now())
 }
 
 model Payment {
@@ -99,14 +126,29 @@ model Payment {
 }
 
 model Wallet {
-  id        String   @id @default(uuid())
+  id        String     @id @default(uuid())
 
-  userId    String   @unique
-  user      User     @relation(fields: [userId], references: [id])
+  userId    String?    @unique
+  user      User?      @relation(fields: [userId], references: [id])
 
-  balance   Float    @default(0)
+  type      WalletType @default(USER)
+  balance   Float      @default(0)
 
-  createdAt DateTime @default(now())
+  createdAt DateTime   @default(now())
+
+  transactions Transaction[]
+}
+
+model Transaction {
+  id        String          @id @default(uuid())
+  walletId  String
+  wallet    Wallet          @relation(fields: [walletId], references: [id])
+
+  amount    Float
+  type      TransactionType
+  reference String          @unique
+
+  createdAt DateTime        @default(now())
 }
 
 model Agent {
@@ -135,14 +177,14 @@ model Subscription {
 }
 
 model Customer {
-  id          String    @id @default(uuid())
-  userId      String    // The merchant/user this customer belongs to
-  user        User      @relation(fields: [userId], references: [id])
+  id          String   @id @default(uuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id])
   name        String
   email       String?
   phone       String?
-  totalSpent  Float     @default(0)
-  createdAt   DateTime  @default(now())
+  totalSpent  Float    @default(0)
+  createdAt   DateTime @default(now())
 }
 
 model Lead {
@@ -157,16 +199,16 @@ model Lead {
 }
 
 model Business {
-  id             String    @id @default(uuid())
-  userId         String    @unique
-  user           User      @relation(fields: [userId], references: [id])
+  id             String   @id @default(uuid())
+  userId         String   @unique
+  user           User     @relation(fields: [userId], references: [id])
   name           String
   description    String?
   industry       String?
   logo           String?
   momoNumber     String?
   momoNetwork    String?
-  balance        Float     @default(0)
-  createdAt      DateTime  @default(now())
-  updatedAt      DateTime  @updatedAt
+  balance        Float    @default(0)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
 }

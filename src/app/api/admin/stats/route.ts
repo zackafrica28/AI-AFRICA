@@ -1,10 +1,10 @@
+import { prisma } from "@/lib/prisma";
 import { NextResponse } from "next/server";
-import prisma from "@/lib/prisma";
 
 export async function GET() {
     try {
         const userCount = await prisma.user.count();
-        const vendorCount = await prisma.vendor.count();
+        const businessCount = await prisma.business.count();
         const productCount = await prisma.product.count();
         const orderCount = await prisma.order.count();
 
@@ -18,7 +18,7 @@ export async function GET() {
 
         return NextResponse.json({
             userCount,
-            vendorCount,
+            businessCount,
             productCount,
             orderCount,
             totalRevenue,

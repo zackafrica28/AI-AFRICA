@@ -26,9 +26,9 @@ export async function updateUserRole(userId: string, role: string) {
     });
 }
 
-export async function getUserAnalytics(userId: string) {
+export async function getUserAnalytics(firebaseUid: string) {
     const user = await prisma.user.findUnique({
-        where: { id: userId },
+        where: { firebaseUid: firebaseUid },
         include: {
             orders: true,
             agents: true,

@@ -6,9 +6,9 @@ import { prisma } from "@/lib/prisma";
  * Fetches global platform analytics for the Admin Control Panel.
  */
 export async function getGlobalAnalytics() {
-    const [userCount, vendorCount, productCount, orderCount] = await Promise.all([
+    const [userCount, businessCount, productCount, orderCount] = await Promise.all([
         prisma.user.count(),
-        prisma.vendor.count(),
+        prisma.business.count(),
         prisma.product.count(),
         prisma.order.count(),
     ]);
