@@ -54,26 +54,26 @@ enum TransactionType {
 }
 
 model User {
-  id            String   @id @default(uuid())
-  firebaseUid   String?   @unique
-  email         String   @unique
-  password      String
-  name          String?
-  phone         String?  @unique
-  role          UserRole @default(USER)
-  subscriptionTier String   @default("NONE")
-
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
-
-  products      Product[]
-  orders        Order[]
-  wallet        Wallet?
-  agents        Agent[]
-  subscriptions Subscription[]
-  customers     Customer[]
-  leads         Lead[]
-  business      Business?
+  id               String         @id @default(uuid())
+  firebaseUid      String?        @unique
+  email            String         @unique
+  password         String
+  name             String?
+  phone            String?        @unique
+  role             UserRole       @default(USER)
+  subscriptionTier String         @default("NONE")
+  createdAt        DateTime       @default(now())
+  updatedAt        DateTime       @updatedAt
+  products         Product[]
+  orders           Order[]
+  wallet           Wallet?
+  agents           Agent[]
+  subscriptions    Subscription[]
+  customers        Customer[]
+  leads            Lead[]
+  deals            Deal[]
+  activities       Activity[]
+  business         Business?
 }
 
 model Product {
@@ -83,60 +83,44 @@ model Product {
   price       Float
   image       String?
   active      Boolean  @default(true)
-
   sellerId    String
   seller      User     @relation(fields: [sellerId], references: [id])
-
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
-
   orders      Order[]
 }
 
 model Order {
   id             String      @id @default(uuid())
-
   userId         String
   user           User        @relation(fields: [userId], references: [id])
-
   productId      String
   product        Product     @relation(fields: [productId], references: [id])
-
   vendorId       String?
-
   total          Float
   status         OrderStatus @default(PENDING)
-
   escrowWalletId String?
-
   payment        Payment?
-
   createdAt      DateTime    @default(now())
 }
 
 model Payment {
-  id            String          @id @default(uuid())
-  orderId       String          @unique
-  order         Order           @relation(fields: [orderId], references: [id])
-
-  provider      PaymentProvider
-  reference     String
-  amount        Float
-
-  createdAt     DateTime        @default(now())
+  id        String          @id @default(uuid())
+  orderId   String          @unique
+  order     Order           @relation(fields: [orderId], references: [id])
+  provider  PaymentProvider
+  reference String
+  amount    Float
+  createdAt DateTime        @default(now())
 }
 
 model Wallet {
-  id        String     @id @default(uuid())
-
-  userId    String?    @unique
-  user      User?      @relation(fields: [userId], references: [id])
-
-  type      WalletType @default(USER)
-  balance   Float      @default(0)
-
-  createdAt DateTime   @default(now())
-
+  id           String        @id @default(uuid())
+  userId       String?       @unique
+  user         User?         @relation(fields: [userId], references: [id])
+  type         WalletType    @default(USER)
+  balance      Float         @default(0)
+  createdAt    DateTime      @default(now())
   transactions Transaction[]
 }
 
@@ -144,48 +128,41 @@ model Transaction {
   id        String          @id @default(uuid())
   walletId  String
   wallet    Wallet          @relation(fields: [walletId], references: [id])
-
   amount    Float
   type      TransactionType
   reference String          @unique
-
   createdAt DateTime        @default(now())
 }
 
 model Agent {
   id        String   @id @default(uuid())
-
   userId    String
   user      User     @relation(fields: [userId], references: [id])
-
   name      String
   type      String
   active    Boolean  @default(true)
-
   createdAt DateTime @default(now())
 }
 
 model Subscription {
   id        String   @id @default(uuid())
-
   userId    String
   user      User     @relation(fields: [userId], references: [id])
-
   plan      String
   active    Boolean  @default(true)
-
   createdAt DateTime @default(now())
 }
 
 model Customer {
-  id          String   @id @default(uuid())
-  userId      String
-  user        User     @relation(fields: [userId], references: [id])
-  name        String
-  email       String?
-  phone       String?
-  totalSpent  Float    @default(0)
-  createdAt   DateTime @default(now())
+  id         String   @id @default(uuid())
+  userId     String
+  user       User     @relation(fields: [userId], references: [id])
+  name       String
+  email      String?
+  phone      String?
+  totalSpent Float    @default(0)
+  createdAt  DateTime @default(now())
+  deals      Deal[]
 }
 
 model Lead {
@@ -199,17 +176,39 @@ model Lead {
   createdAt DateTime @default(now())
 }
 
+model Deal {
+  id         String    @id @default(uuid())
+  userId     String
+  user       User      @relation(fields: [userId], references: [id])
+  name       String
+  value      Float
+  status     String    @default("OPEN")
+  customerId String?
+  customer   Customer? @relation(fields: [customerId], references: [id])
+  createdAt  DateTime  @default(now())
+}
+
+model Activity {
+  id          String   @id @default(uuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id])
+  type        String
+  description String
+  relatedTo   String?
+  createdAt   DateTime @default(now())
+}
+
 model Business {
-  id             String   @id @default(uuid())
-  userId         String   @unique
-  user           User     @relation(fields: [userId], references: [id])
-  name           String
-  description    String?
-  industry       String?
-  logo           String?
-  momoNumber     String?
-  momoNetwork    String?
-  balance        Float    @default(0)
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
+  id          String   @id @default(uuid())
+  userId      String   @unique
+  user        User     @relation(fields: [userId], references: [id])
+  name        String
+  description String?
+  industry    String?
+  logo        String?
+  momoNumber  String?
+  momoNetwork String?
+  balance     Float    @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }

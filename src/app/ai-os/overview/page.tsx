@@ -13,35 +13,39 @@ import {
     Zap,
     Play,
     Pause,
-    BarChart3
+    BarChart3,
+    Plus
 } from "lucide-react";
 import styles from "./overview.module.css";
 import { useAuth } from "@/context/AuthContext";
 import { getUserAgents, updateAgentState } from "@/server/actions/agent";
 
 export default function AIOSOverview() {
-    const { user } = useAuth();
+    const { profile } = useAuth();
     const [agents, setAgents] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        if (!user?.uid) return;
+        if (!profile?.id) {
+            if (profile === null) setLoading(false);
+            return;
+        }
         setLoading(true);
-        getUserAgents(user.uid).then(data => {
+        getUserAgents(profile.id).then(data => {
             setAgents(data);
             setLoading(false);
         });
-    }, [user?.uid]);
-
-    if (loading) {
-        return <DashboardLayout><div className="flex items-center justify-center min-h-[60vh]"><div className="neon-spinner"></div></div></DashboardLayout>;
-    }
+    }, [profile?.id]);
 
     const toggleAgent = async (agentId: string, currentStatus: boolean) => {
         const nextStatus = !currentStatus;
         await updateAgentState(agentId, nextStatus);
         setAgents(agents.map(a => a.id === agentId ? { ...a, active: nextStatus } : a));
     };
+
+    if (loading) {
+        return <DashboardLayout><div className="flex items-center justify-center min-h-[60vh]"><div className="neon-spinner"></div></div></DashboardLayout>;
+    }
 
     return (
         <DashboardLayout>
@@ -119,6 +123,3 @@ export default function AIOSOverview() {
     );
 }
 
-function Plus(props: any) {
-    return <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14" /><path d="M12 5v14" /></svg>;
-}

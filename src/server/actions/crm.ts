@@ -43,3 +43,35 @@ export async function getPipelineStats(userId: string) {
         statusCounts,
     };
 }
+export async function getDeals(userId: string) {
+    return await prisma.deal.findMany({
+        where: { userId },
+        orderBy: { createdAt: "desc" },
+        include: { customer: true }
+    });
+}
+
+export async function createDeal(userId: string, data: any) {
+    return await prisma.deal.create({
+        data: {
+            ...data,
+            userId,
+        },
+    });
+}
+
+export async function getCustomers(userId: string) {
+    return await prisma.customer.findMany({
+        where: { userId },
+        orderBy: { createdAt: "desc" },
+    });
+}
+
+export async function createActivity(userId: string, data: { type: string; description: string; relatedTo?: string }) {
+    return await prisma.activity.create({
+        data: {
+            ...data,
+            userId,
+        },
+    });
+}

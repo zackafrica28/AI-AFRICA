@@ -4,6 +4,7 @@ import "./globals.css";
 import { AuthProvider } from "@/context/AuthContext";
 import { LiveFeedProvider } from "@/context/LiveFeedContext";
 import { ThemeProvider } from "@/context/ThemeContext";
+import { UIProvider } from "@/context/UIContext";
 import DashboardLayout from "@/components/layout/DashboardLayout";
 
 const orbitron = Orbitron({
@@ -35,9 +36,11 @@ export default function RootLayout({
         <ThemeProvider>
           <AuthProvider>
             <LiveFeedProvider>
-              <DashboardLayout>
-                {children}
-              </DashboardLayout>
+              <UIProvider>
+                <DashboardLayout>
+                  {children}
+                </DashboardLayout>
+              </UIProvider>
             </LiveFeedProvider>
           </AuthProvider>
         </ThemeProvider>

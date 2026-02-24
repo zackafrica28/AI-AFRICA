@@ -3,47 +3,110 @@
     gap: 20px;
     overflow-x: auto;
     padding-bottom: 20px;
+    min-height: 70vh;
 }
 
 .stage {
-    min-width: 260px;
-    background: rgba(255, 255, 255, 0.02);
+    flex: 0 0 300px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.05);
     border-radius: 12px;
+    display: flex;
+    flex-direction: column;
     padding: 16px;
-    border: 1px solid var(--border);
+}
+
+.stageHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
 }
 
 .stageTitle {
-    font-size: 0.7rem;
-    font-weight: 700;
-    color: var(--accent);
-    margin-bottom: 20px;
+    font-family: var(--font-orbitron);
+    font-size: 0.75rem;
     letter-spacing: 1px;
+    color: var(--accent);
+}
+
+.stageCount {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-size: 0.7rem;
+    font-weight: bold;
+}
+
+.stageTotal {
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 20px;
+    color: white;
 }
 
 .dropZone {
     display: flex;
     flex-direction: column;
     gap: 12px;
-    min-height: 400px;
+    flex: 1;
+}
+
+.emptyZone {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px dashed rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.2);
+    text-transform: uppercase;
+    letter-spacing: 1px;
 }
 
 .card {
-    padding: 16px;
-    background: var(--bg-secondary);
-    border: 1px solid var(--border);
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 12px;
     border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: grab;
+    transition: all 0.3s ease;
 }
 
-.card p {
-    font-weight: 600;
+.card:hover {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: var(--accent);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 243, 255, 0.1);
+}
+
+.dealName {
     font-size: 0.9rem;
+    font-weight: 500;
     margin-bottom: 4px;
 }
 
-.card span {
+.dealMeta {
+    display: flex;
+    align-items: center;
+    gap: 4px;
     font-size: 0.8rem;
+    opacity: 0.7;
+}
+
+.moveBtn {
+    background: none;
+    border: none;
+    color: rgba(255, 255, 255, 0.3);
+    cursor: pointer;
+    padding: 4px;
+    transition: color 0.2s;
+}
+
+.moveBtn:hover {
     color: var(--accent);
-    font-weight: 700;
 }

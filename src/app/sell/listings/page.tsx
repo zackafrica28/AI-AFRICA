@@ -11,24 +11,26 @@ import { getVendorProducts, deleteProduct } from "@/server/actions/product";
 import Link from "next/link";
 
 export default function SellListings() {
-    const { user } = useAuth();
+    const { profile } = useAuth();
     const [products, setProducts] = useState<any[]>([]);
-    const [vendor, setVendor] = useState<any>(null);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        if (!user?.uid) {
-            setLoading(false);
+        if (!profile?.id) {
+            if (profile === null) setLoading(false);
             return;
         }
 
         async function loadListingData() {
             try {
-                const profile = await getVendorProfile(user!.uid);
-                if (profile) {
-                    setVendor(profile);
-                    const list = await getVendorProducts(profile.id);
+                // Fetch the business profile using the internal User ID
+                const biz = await getVendorProfile(profile!.id);
+                if (biz) {
+                    // Fetch products using the internal User ID (sellerId)
+                    const list = await getVendorProducts(profile!.id);
                     setProducts(list);
+                } else {
+                    console.log("No business profile found for this user");
                 }
             } catch (error) {
                 console.error("Error loading products:", error);
@@ -38,12 +40,12 @@ export default function SellListings() {
         }
 
         loadListingData();
-    }, [user?.uid]);
+    }, [profile?.id]);
 
     const handleDelete = async (id: string) => {
         if (!confirm("Confirm asset deletion? This cannot be undone.")) return;
         try {
-            await deleteProduct(id, vendor.id);
+            await deleteProduct(id, profile!.id);
             setProducts(products.filter(p => p.id !== id));
         } catch (error) {
             alert("Deletion failed. Node protected.");
@@ -70,11 +72,11 @@ export default function SellListings() {
                     products.map((p) => (
                         <div key={p.id} className={styles.card}>
                             <div className={styles.media}>
-                                <img src={p.images[0] || "/placeholder.jpg"} alt={p.title} />
+                                <img src={p.image || "/placeholder.jpg"} alt={p.title} />
                             </div>
                             <div className={styles.info}>
                                 <h3>{p.title}</h3>
-                                <p>${p.price.toLocaleString()} • {p.category}</p>
+                                <p className="text-accent font-bold">${p.price.toLocaleString()}</p>
                             </div>
                             <div className={styles.actions}>
                                 <Button size="sm" variant="glass"><Edit size={14} /></Button>

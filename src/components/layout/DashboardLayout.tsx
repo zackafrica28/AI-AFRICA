@@ -1,13 +1,15 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import Sidebar from "./Sidebar";
 import MobileNav from "./MobileNav";
 import styles from "./DashboardLayout.module.css";
 import { usePathname } from "next/navigation";
 
+import { useUI } from "@/context/UIContext";
+
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
-    const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+    const { isSidebarOpen, setSidebarOpen } = useUI();
     const pathname = usePathname();
 
     // Pages that shouldn't have the dashboard layout (e.g., login, landing)
@@ -18,7 +20,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
     return (
         <div className={styles.layout}>
-            <Sidebar isOpen={isSidebarOpen} setIsOpen={setIsSidebarOpen} />
+            <Sidebar isOpen={isSidebarOpen} setIsOpen={setSidebarOpen} />
 
             <main className={`${styles.mainContent} ${isSidebarOpen ? styles.shifted : styles.fullWidth}`}>
                 {children}
