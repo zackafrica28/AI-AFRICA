@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { debitWallet, creditWallet } from "@/lib/wallet";
+import crypto from "crypto";
 import { OrderStatus, TransactionType, WalletType } from "@prisma/client";
 
 const PLATFORM_COMMISSION_RATE = 0.10; // 10% commission to AI-AFRICA

@@ -12,6 +12,7 @@ export async function createAgent(userId: string, type: string) {
     return await prisma.agent.create({
         data: {
             userId,
+            name: type,
             type,
             active: true,
         },

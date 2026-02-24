@@ -30,7 +30,7 @@ export async function POST(request: Request) {
                 userId,
                 productId,
                 total,
-                status: (status as OrderStatus) || OrderStatus.PAID,
+                status: (status as OrderStatus) || OrderStatus.PENDING,
             },
         });
 

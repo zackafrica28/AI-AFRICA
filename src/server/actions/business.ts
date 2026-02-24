@@ -16,7 +16,6 @@ export async function createBusiness(userId: string, data: {
                 industry: data.industry,
                 momoNumber: data.momoNumber,
                 momoNetwork: data.momoNetwork,
-                currency: "USD",
             }
         });
         return { success: true, business };
@@ -31,8 +30,12 @@ export async function getBusinessStats(userId: string) {
         const business = await prisma.business.findUnique({
             where: { userId },
             include: {
-                products: true,
-                customers: true,
+                user: {
+                    include: {
+                        products: true,
+                        customers: true,
+                    }
+                }
             }
         });
 
@@ -41,8 +44,8 @@ export async function getBusinessStats(userId: string) {
         // Simulate revenue growth for demo purposes
         return {
             balance: business.balance,
-            productCount: business.products.length,
-            customerCount: business.customers.length,
+            productCount: (business as any).user.products.length,
+            customerCount: (business as any).user.customers.length,
             revenueHistory: [400, 600, 800, 1200, 1100, 1500, 2000],
         };
     } catch (error) {

@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { creditWallet } from "@/lib/wallet";
 import { OrderStatus, TransactionType, WalletType } from "@prisma/client";
 
 /**
